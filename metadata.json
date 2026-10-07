@@ -1,0 +1,6 @@
+{
+  "name": "TechPulse Daily",
+  "description": "A modern, professional technology publication covering AI breakthroughs, emerging tech, next-generation gadgets, useful apps, and the future of digital life.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
