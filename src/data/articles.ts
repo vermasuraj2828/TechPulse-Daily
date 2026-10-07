@@ -1,4 +1,10 @@
 import { Article } from '../types/blog';
+import heroAiImg from '../assets/images/hero_ai_everyday_1791347956209.jpg';
+import smartphonesImg from '../assets/images/smartphones_future_1791347970000.jpg';
+import productivityImg from '../assets/images/digital_workspace_productivity_1791347981240.jpg';
+import smartHomeImg from '../assets/images/smart_home_living_1791347991805.jpg';
+import aiSearchImg from '../assets/images/ai_search_future_1791348007374.jpg';
+import roboticsImg from '../assets/images/future_tech_robotics_1791348021374.jpg';
 
 export const ARTICLES: Article[] = [
   {
@@ -15,7 +21,7 @@ export const ARTICLES: Article[] = [
     date: 'October 4, 2026',
     readTime: '6 min read',
     featured: true,
-    featuredImage: '/src/assets/images/hero_ai_everyday_1791347956209.jpg',
+    featuredImage: heroAiImg,
     imageCaption: 'Ambient machine intelligence is increasingly woven into the physical architecture of everyday human life.',
     excerpt: 'Explore how artificial intelligence is transforming smartphones, web search, retail experiences, healthcare, and personal productivity behind the scenes.',
     leadParagraph: 'For decades, popular culture envisioned the arrival of artificial intelligence as a singular, dramatic event: humanoid androids walking down city sidewalks or sentient mainframes issuing decrees. In reality, the AI revolution has arrived with far greater elegance and subtlety. It is not an imposing monolith, but an ambient, pervasive utility running quietly beneath our taps, keystrokes, and morning commutes.',
@@ -90,7 +96,7 @@ export const ARTICLES: Article[] = [
     date: 'October 3, 2026',
     readTime: '8 min read',
     featured: false,
-    featuredImage: '/src/assets/images/digital_workspace_productivity_1791347981240.jpg',
+    featuredImage: productivityImg,
     imageCaption: 'A structured digital workspace harnessing specialized cognitive tools to eliminate clerical friction.',
     excerpt: 'Discover ten battle-tested AI tools across writing, research synthesis, coding, visual planning, and calendar automation to reclaim hours every week.',
     leadParagraph: 'Every technology hype cycle is accompanied by a flood of shallow utilities that promise the world but deliver little more than superficial novelty. The true measure of any software tool is whether it compounds your output while reducing mental fatigue. When applied with intention, specialized artificial intelligence applications can strip away hours of administrative drag, allowing you to focus your intellect where it matters most.',
@@ -170,7 +176,7 @@ export const ARTICLES: Article[] = [
     date: 'October 2, 2026',
     readTime: '7 min read',
     featured: false,
-    featuredImage: '/src/assets/images/smartphones_future_1791347970000.jpg',
+    featuredImage: smartphonesImg,
     imageCaption: 'The next decade of smartphones will prioritize structural transformation, solid-state chemistry, and ambient intelligence.',
     excerpt: 'Explore the engineering breakthroughs destined to redefine smartphones: tri-fold form factors, silicon-carbon batteries, quantum camera sensors, and direct-to-cell satellite data.',
     leadParagraph: 'For several years, consumer technology critics lamented that the smartphone had plateaued. Rectangular slabs of glass grew imperceptibly faster each autumn, camera lenses gained minor megapixel bumps, and screen bezels receded by fractions of a millimeter. Yet beneath this surface tranquility, massive chemical, optical, and architectural transformations have been simmering in global research labs.',
@@ -239,7 +245,7 @@ export const ARTICLES: Article[] = [
     date: 'October 1, 2026',
     readTime: '9 min read',
     featured: false,
-    featuredImage: '/src/assets/images/future_tech_robotics_1791348021374.jpg',
+    featuredImage: roboticsImg,
     imageCaption: 'Collaborative digital pipelines are shifting human roles from repetitive synthesis to strategic direction and verification.',
     excerpt: 'An in-depth analysis of how generative AI, autonomous software agents, and enterprise automation are restructuring knowledge work, corporate roles, and operational velocity.',
     leadParagraph: 'Throughout industrial history, technological breakthroughs transformed physical labor: the steam engine replaced muscle power, electricity illuminated factory floors, and automated assembly lines accelerated physical manufacturing. In our current era, artificial intelligence is delivering the first true structural revolution to knowledge work, reshaping how organizations think, collaborate, and execute.',
@@ -308,7 +314,7 @@ export const ARTICLES: Article[] = [
     date: 'September 30, 2026',
     readTime: '7 min read',
     featured: false,
-    featuredImage: '/src/assets/images/digital_workspace_productivity_1791347981240.jpg',
+    featuredImage: productivityImg,
     imageCaption: 'Cultivating deliberate stillness and structural boundaries amidst an environment of constant digital noise.',
     excerpt: 'Actionable strategies for mastering deep work: asynchronous communication protocols, ruthless notification triage, batch processing, and physical environment design.',
     leadParagraph: 'Modern digital life is engineered for distraction. Trillions of dollars of venture capital and thousands of behavioral psychologists have fine-tuned our notification feeds, social apps, and collaborative chat platforms to harvest human attention. In such an ecosystem, productivity is no longer a matter of willpower or downloading another checklist app; it is a defensive martial art of cognitive sovereignty.',
@@ -377,7 +383,7 @@ export const ARTICLES: Article[] = [
     date: 'September 28, 2026',
     readTime: '8 min read',
     featured: false,
-    featuredImage: '/src/assets/images/smart_home_living_1791347991805.jpg',
+    featuredImage: smartHomeImg,
     imageCaption: 'The modern smart home balances invisible automation with rigorous local data security and natural materiality.',
     excerpt: 'How unified IoT standards, local neural processing, circadian lighting, and smart energy grids are turning houses into intuitive living environments.',
     leadParagraph: 'A decade ago, the promise of the smart home was often marred by frustrating fragmentation. Homeowners found themselves trapped in competing walled gardens, juggling six proprietary apps just to dim living room bulbs or adjust a thermostat, while devices frequently unlinked themselves after router reboots. Today, the smart home has graduated from fragile novelty gadgets into a mature, cohesive architectural discipline.',
@@ -446,7 +452,7 @@ export const ARTICLES: Article[] = [
     date: 'September 26, 2026',
     readTime: '7 min read',
     featured: false,
-    featuredImage: '/src/assets/images/ai_search_future_1791348007374.jpg',
+    featuredImage: aiSearchImg,
     imageCaption: 'Search is shifting from rigid keyword matching to multi-dimensional semantic dialogue and synthesized answers.',
     excerpt: 'An investigation into the foundational shift from keyword-based web indices to direct answer synthesis, grounded citations, and multimodal search engines.',
     leadParagraph: 'Since the dawn of the commercial World Wide Web in the late 1990s, the paradigm of finding information online remained fundamentally static: a user typed three or four keywords into a minimalist text box, an index of inverted tables retrieved matching documents, and the screen presented ten blue links with brief text snippets. That twenty-five-year regime has officially come to an end.',
@@ -515,7 +521,7 @@ export const ARTICLES: Article[] = [
     date: 'September 24, 2026',
     readTime: '10 min read',
     featured: false,
-    featuredImage: '/src/assets/images/future_tech_robotics_1791348021374.jpg',
+    featuredImage: roboticsImg,
     imageCaption: 'The convergence of robotics, bio-computation, and quantum physics is accelerating technological timelines.',
     excerpt: 'A comprehensive roadmap across ten foundational technology frontiers poised to redefine industry, healthcare, energy, and civilization over the coming decade.',
     leadParagraph: 'We live in an extraordinary historical epoch where multiple deep technological trajectories are converging simultaneously. Innovations in computational hardware are unlocking breakthroughs in molecular biology; advances in clean battery chemistry are empowering autonomous robotic transport; and new quantum principles are illuminating the nature of material simulation. Looking forward, ten defining technological trends will shape humanity’s trajectory over the next ten years.',
@@ -610,7 +616,7 @@ export const ARTICLES: Article[] = [
     date: 'September 22, 2026',
     readTime: '8 min read',
     featured: false,
-    featuredImage: '/src/assets/images/smartphones_future_1791347970000.jpg',
+    featuredImage: smartphonesImg,
     imageCaption: 'The smartphone application ecosystem condensed entire physical industries into a single glass slate.',
     excerpt: 'A comprehensive retrospective on how the mobile app ecosystem dismantled physical barriers in banking, transportation, social life, and healthcare.',
     leadParagraph: 'When Steve Jobs introduced the App Store in 2008 with a modest catalog of roughly five hundred applications, few observers anticipated that software downloaded onto a touch-screen device would fundamentally rewrite modern civilization’s economic, cultural, and behavioral DNA. In less than two decades, the mobile application transformed from a convenient utility into the primary operating system of human society.',
@@ -678,7 +684,7 @@ export const ARTICLES: Article[] = [
     date: 'September 20, 2026',
     readTime: '9 min read',
     featured: false,
-    featuredImage: '/src/assets/images/ai_search_future_1791348007374.jpg',
+    featuredImage: aiSearchImg,
     imageCaption: 'The future internet will transform from a catalog of static web pages into an adaptive, conversational fabric.',
     excerpt: 'A visionary exploration of the next digital era: generative user interfaces, decentralized verifiable identity, spatial web standards, and the preservation of authentic human community.',
     leadParagraph: 'If a web developer from 1996 traveled forward thirty years to examine modern web applications, they would recognize the fundamental structural bones: HTML documents, URLs, stylesheets, and client-server architectures. But looking forward to the next thirty years, the underlying assumptions of what constitutes the "Internet" are dissolving. The web is transitioning from a static repository of human-authored documents into an adaptive, intelligent, and spatial reality.',

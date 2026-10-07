@@ -11,28 +11,39 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   article,
   onReadArticle,
 }) => {
-  const [imageError, setImageError] = useState(false);
+  const [imgSrc, setImgSrc] = useState(article.featuredImage);
+  const [hasError, setHasError] = useState(false);
+
+  const handleImgError = () => {
+    const filename = article.featuredImage.split('/').pop()?.split('?')[0];
+    if (filename && imgSrc !== `/images/${filename}`) {
+      setImgSrc(`/images/${filename}`);
+    } else {
+      setHasError(true);
+    }
+  };
 
   return (
     <article className="group flex flex-col bg-white border border-slate-200/90 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all duration-300 h-full">
       {/* Featured Thumbnail */}
       <div 
         onClick={() => onReadArticle(article)}
-        className="relative aspect-[16/10] overflow-hidden bg-slate-100 cursor-pointer"
+        className="relative aspect-[16/10] overflow-hidden bg-slate-900 cursor-pointer"
       >
-        {!imageError ? (
+        {!hasError ? (
           <img
-            src={article.featuredImage}
+            src={imgSrc}
             alt={article.title}
             referrerPolicy="no-referrer"
-            onError={() => setImageError(true)}
+            onError={handleImgError}
             className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-slate-100 text-slate-400">
-            <ImageOff className="w-8 h-8 mb-2 text-slate-400" />
-            <span className="text-xs font-medium text-slate-500">{article.category}</span>
+          <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white relative">
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+            <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1 z-10">{article.category}</span>
+            <span className="text-sm font-serif-editorial font-bold text-center text-slate-200 line-clamp-2 px-4 z-10">{article.title}</span>
           </div>
         )}
       </div>
@@ -69,11 +80,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         {/* Card Footer: Author + Read More Action */}
         <div className="pt-4 border-t border-slate-100 flex items-center justify-between mt-auto">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full overflow-hidden bg-slate-200 shrink-0">
+            <div className="w-7 h-7 rounded-full overflow-hidden bg-indigo-50 border border-indigo-200/60 text-indigo-700 font-bold text-[10px] flex items-center justify-center shrink-0 relative">
+              <span className="select-none">
+                {article.author.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
+              </span>
               <img
                 src={article.author.avatar}
                 alt={article.author.name}
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = 'none';
                 }}

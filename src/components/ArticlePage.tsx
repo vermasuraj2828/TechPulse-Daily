@@ -34,8 +34,24 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
   const [bookmarked, setBookmarked] = useState(false);
   const [likes, setLikes] = useState(42);
   const [liked, setLiked] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const [imgSrc, setImgSrc] = useState(article.featuredImage);
+  const [hasError, setHasError] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Synchronize imgSrc if article changes
+  useEffect(() => {
+    setImgSrc(article.featuredImage);
+    setHasError(false);
+  }, [article.id, article.featuredImage]);
+
+  const handleImgError = () => {
+    const filename = article.featuredImage.split('/').pop()?.split('?')[0];
+    if (filename && imgSrc !== `/images/${filename}`) {
+      setImgSrc(`/images/${filename}`);
+    } else {
+      setHasError(true);
+    }
+  };
 
   // Scroll depth tracking
   useEffect(() => {
@@ -144,11 +160,14 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
           {/* Author Byline & Details */}
           <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-slate-200">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-200 border border-slate-200 shrink-0">
+              <div className="w-12 h-12 rounded-full overflow-hidden bg-indigo-50 border border-indigo-200/60 text-indigo-700 font-bold text-sm flex items-center justify-center shrink-0 relative">
+                <span className="select-none">
+                  {article.author.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
+                </span>
                 <img
                   src={article.author.avatar}
                   alt={article.author.name}
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = 'none';
                   }}
@@ -182,19 +201,20 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
         {/* Large Featured Image */}
         <figure className="mb-10">
           <div className="rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 aspect-[16/9] relative">
-            {!imageError ? (
+            {!hasError ? (
               <img
-                src={article.featuredImage}
+                src={imgSrc}
                 alt={article.title}
                 referrerPolicy="no-referrer"
-                onError={() => setImageError(true)}
+                onError={handleImgError}
                 className="w-full h-full object-cover"
                 loading="eager"
               />
             ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-slate-900 text-white">
-                <ImageOff className="w-12 h-12 text-slate-500 mb-2" />
-                <span className="text-sm text-slate-400">{article.category} Editorial Visual</span>
+              <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white relative">
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
+                <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2 z-10">{article.category} Editorial Visual</span>
+                <span className="font-serif-editorial text-2xl sm:text-3xl font-bold text-center text-slate-100 px-6 z-10">{article.title}</span>
               </div>
             )}
           </div>

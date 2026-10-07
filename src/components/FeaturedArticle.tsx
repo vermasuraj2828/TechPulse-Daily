@@ -11,7 +11,17 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
   article,
   onReadArticle,
 }) => {
-  const [imageError, setImageError] = useState(false);
+  const [imgSrc, setImgSrc] = useState(article.featuredImage);
+  const [hasError, setHasError] = useState(false);
+
+  const handleImgError = () => {
+    const filename = article.featuredImage.split('/').pop()?.split('?')[0];
+    if (filename && imgSrc !== `/images/${filename}`) {
+      setImgSrc(`/images/${filename}`);
+    } else {
+      setHasError(true);
+    }
+  };
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
@@ -31,19 +41,20 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
           {/* Large Image Column (7 cols on desktop) */}
           <div className="lg:col-span-7 relative min-h-[300px] sm:min-h-[400px] lg:min-h-[480px] overflow-hidden bg-slate-900">
-            {!imageError ? (
+            {!hasError ? (
               <img
-                src={article.featuredImage}
+                src={imgSrc}
                 alt={article.title}
                 referrerPolicy="no-referrer"
-                onError={() => setImageError(true)}
+                onError={handleImgError}
                 className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 loading="eager"
               />
             ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-slate-900 to-indigo-950 text-white">
-                <ImageOff className="w-12 h-12 text-slate-500 mb-3" />
-                <span className="text-sm font-medium text-slate-400">{article.category} Feature</span>
+              <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white relative">
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
+                <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2 z-10">{article.category} Lead Story</span>
+                <span className="font-serif-editorial text-2xl sm:text-3xl font-bold text-center text-slate-100 px-6 z-10 leading-snug">{article.title}</span>
               </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent lg:hidden" />
@@ -81,11 +92,14 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
             <div>
               {/* Author Strip */}
               <div className="flex items-center gap-3 pt-6 border-t border-slate-100 mb-6">
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-200 border border-slate-200 shrink-0">
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-indigo-50 border border-indigo-200/60 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 relative">
+                  <span className="select-none">
+                    {article.author.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
+                  </span>
                   <img
                     src={article.author.avatar}
                     alt={article.author.name}
-                    className="w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => {
                       (e.target as HTMLElement).style.display = 'none';
                     }}

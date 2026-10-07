@@ -180,11 +180,17 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             {editorialTeam.map((member) => (
               <div key={member.name} className="p-6 bg-slate-50 border border-slate-200/80 rounded-2xl flex flex-col justify-between">
                 <div>
-                  <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-200 border border-slate-200 mb-4">
+                  <div className="w-16 h-16 rounded-full overflow-hidden bg-indigo-50 border border-indigo-200/60 text-indigo-700 font-bold text-base flex items-center justify-center mb-4 relative">
+                    <span className="select-none">
+                      {member.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
+                    </span>
                     <img
                       src={member.avatar}
                       alt={member.name}
-                      className="w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
                     />
                   </div>
                   <h3 className="font-serif-editorial text-lg font-bold text-slate-900">
