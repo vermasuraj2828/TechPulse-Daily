@@ -202,7 +202,7 @@ export default function App() {
                   </div>
                   <p className="text-slate-600 text-sm max-w-xl">
                     {selectedCategory === 'All'
-                      ? 'Browse our complete catalog of 10 in-depth technology essays, technical guides, and future forecasts.'
+                      ? 'Browse our complete catalog of 11 in-depth technology essays, technical guides, and future forecasts.'
                       : `Displaying stories categorized under ${selectedCategory}.`}
                   </p>
                 </div>

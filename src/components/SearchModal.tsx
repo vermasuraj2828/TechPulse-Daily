@@ -187,7 +187,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               </div>
 
               <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 px-1">
-                All 10 Indexed Articles
+                All {articles.length} Indexed Articles
               </div>
               <div className="space-y-2">
                 {articles.slice(0, 5).map((a) => (

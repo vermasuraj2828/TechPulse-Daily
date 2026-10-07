@@ -158,7 +158,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOpenTopic, selecte
           {/* Editorial metrics strip */}
           <div className="mt-12 pt-8 border-t border-slate-200/80 grid grid-cols-3 gap-4 text-center max-w-xl mx-auto">
             <div>
-              <div className="font-serif-editorial text-2xl font-bold text-slate-900">10</div>
+              <div className="font-serif-editorial text-2xl font-bold text-slate-900">11</div>
               <div className="text-xs text-slate-500 font-medium mt-0.5">In-Depth Essays</div>
             </div>
             <div>
