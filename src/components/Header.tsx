@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Search, Menu, X, ArrowUpRight } from 'lucide-react';
 import { Category } from '../types/blog';
+import { getCategoryUrl } from '../utils/router';
 
 interface HeaderProps {
   currentCategory: Category;
   onSelectCategory: (cat: Category) => void;
-  activeView: 'home' | 'article' | 'about';
+  activeView: string;
   onNavigateHome: () => void;
   onNavigateAbout: () => void;
+  onNavigateUrl?: (url: string) => void;
   onOpenSearch: () => void;
 }
 
@@ -17,41 +19,38 @@ export const Header: React.FC<HeaderProps> = ({
   activeView,
   onNavigateHome,
   onNavigateAbout,
+  onNavigateUrl,
   onOpenSearch,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navLinks: { label: string; cat?: Category; isAbout?: boolean }[] = [
-    { label: 'Home' },
-    { label: 'AI', cat: 'AI' },
-    { label: 'Technology', cat: 'Technology' },
-    { label: 'Gadgets', cat: 'Gadgets' },
-    { label: 'Apps', cat: 'Apps' },
-    { label: 'Future', cat: 'Future' },
-    { label: 'About', isAbout: true },
+  const navLinks: { label: string; url: string; cat?: Category; isAbout?: boolean }[] = [
+    { label: 'Home', url: '/' },
+    { label: 'AI', url: '/category/ai', cat: 'AI' },
+    { label: 'Technology', url: '/category/technology', cat: 'Technology' },
+    { label: 'Gadgets', url: '/category/gadgets', cat: 'Gadgets' },
+    { label: 'Apps', url: '/category/apps', cat: 'Apps' },
+    { label: 'Future', url: '/category/future', cat: 'Future' },
+    { label: 'About', url: '/about', isAbout: true },
   ];
 
-  const handleNavClick = (link: { label: string; cat?: Category; isAbout?: boolean }) => {
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    link: { label: string; url: string; cat?: Category; isAbout?: boolean }
+  ) => {
+    // Allow default browser behavior for Cmd/Ctrl clicks (open new tab)
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
     setMobileMenuOpen(false);
-    if (link.isAbout) {
+
+    if (onNavigateUrl) {
+      onNavigateUrl(link.url);
+    } else if (link.isAbout) {
       onNavigateAbout();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (link.cat) {
       onSelectCategory(link.cat);
-      if (activeView !== 'home') {
-        onNavigateHome();
-      }
-      setTimeout(() => {
-        const el = document.getElementById('articles-section');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 50);
     } else {
-      // Home
-      onSelectCategory('All');
       onNavigateHome();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -59,13 +58,19 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-shadow">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Zone 1: Brand Wordmark */}
+          {/* Zone 1: Brand Wordmark (Canonical URL: /) */}
           <div className="flex items-center">
-            <button
-              onClick={() => {
-                onSelectCategory('All');
-                onNavigateHome();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            <a
+              href="/"
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                if (onNavigateUrl) {
+                  onNavigateUrl('/');
+                } else {
+                  onSelectCategory('All');
+                  onNavigateHome();
+                }
               }}
               className="text-left group flex items-center gap-2.5 focus:outline-none"
               aria-label="TechPulse Daily Home"
@@ -89,34 +94,36 @@ export const Header: React.FC<HeaderProps> = ({
                   Independent Tech · AI · Gadgets · Digital Life
                 </span>
               </div>
-            </button>
+            </a>
           </div>
 
-          {/* Zone 2: Navigation Links */}
+          {/* Zone 2: Navigation Links with Semantic Unique URLs */}
           <nav className="hidden md:flex items-center gap-6 lg:gap-8" aria-label="Main Navigation">
             {navLinks.map((link) => {
               const isActive =
                 link.isAbout
                   ? activeView === 'about'
-                  : activeView === 'home' &&
-                    ((!link.cat && currentCategory === 'All') ||
+                  : (activeView === 'home' || activeView === 'category') &&
+                    ((!link.cat && currentCategory === 'All' && activeView === 'home') ||
                       (link.cat && currentCategory === link.cat));
 
               return (
-                <button
+                <a
                   key={link.label}
-                  onClick={() => handleNavClick(link)}
+                  href={link.url}
+                  onClick={(e) => handleLinkClick(e, link)}
                   className={`text-sm font-medium transition-colors cursor-pointer py-1 relative ${
                     isActive
                       ? 'text-indigo-600 font-semibold'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
+                  aria-current={isActive ? 'page' : undefined}
                 >
                   {link.label}
                   {isActive && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full" />
                   )}
-                </button>
+                </a>
               );
             })}
           </nav>
@@ -156,23 +163,25 @@ export const Header: React.FC<HeaderProps> = ({
               const isActive =
                 link.isAbout
                   ? activeView === 'about'
-                  : activeView === 'home' &&
-                    ((!link.cat && currentCategory === 'All') ||
+                  : (activeView === 'home' || activeView === 'category') &&
+                    ((!link.cat && currentCategory === 'All' && activeView === 'home') ||
                       (link.cat && currentCategory === link.cat));
 
               return (
-                <button
+                <a
                   key={link.label}
-                  onClick={() => handleNavClick(link)}
+                  href={link.url}
+                  onClick={(e) => handleLinkClick(e, link)}
                   className={`flex items-center justify-between w-full px-4 py-3 rounded-lg text-base font-medium text-left transition-colors ${
                     isActive
                       ? 'bg-indigo-50 text-indigo-700 font-semibold'
                       : 'text-slate-700 hover:bg-slate-50'
                   }`}
+                  aria-current={isActive ? 'page' : undefined}
                 >
                   <span>{link.label}</span>
                   <ArrowUpRight className="w-4 h-4 text-slate-400" />
-                </button>
+                </a>
               );
             })}
           </div>
@@ -183,7 +192,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setMobileMenuOpen(false);
                 onOpenSearch();
               }}
-              className="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors"
+              className="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors cursor-pointer"
             >
               <Search className="w-4 h-4" />
               Search TechPulse Daily

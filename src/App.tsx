@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { ARTICLES } from './data/articles';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { ARTICLES, CATEGORIES } from './data/articles';
 import { Article, Category } from './types/blog';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
@@ -11,33 +11,42 @@ import { Newsletter } from './components/Newsletter';
 import { Footer } from './components/Footer';
 import { ArticlePage } from './components/ArticlePage';
 import { AboutPage } from './components/AboutPage';
+import { NotFoundPage } from './components/NotFoundPage';
 import { SearchModal } from './components/SearchModal';
 import { ContactModal } from './components/ContactModal';
 import { PrivacyModal } from './components/PrivacyModal';
-import { Compass, Filter } from 'lucide-react';
+import { Filter } from 'lucide-react';
+import {
+  Route,
+  parseRoute,
+  getArticleUrl,
+  getCategoryUrl,
+  getAboutUrl,
+  getContactUrl,
+  getPrivacyUrl,
+  getSearchUrl,
+  updatePageMetadata,
+} from './utils/router';
 
 export default function App() {
-  const [selectedCategory, setSelectedCategory] = useState<Category>('All');
-  const [activeView, setActiveView] = useState<'home' | 'article' | 'about'>('home');
-  const [currentArticle, setCurrentArticle] = useState<Article | null>(null);
+  // Current active structured route
+  const [currentRoute, setCurrentRoute] = useState<Route>(() => {
+    return parseRoute(window.location.pathname, window.location.search, window.location.hash);
+  });
 
-  // Modals
+  // Modals state
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchInitialQuery, setSearchInitialQuery] = useState('');
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
-  // The primary lead featured article
+  // Return route for when a modal (search/contact/privacy) was opened on top of a page
+  const [previousUrl, setPreviousUrl] = useState<string>('/');
+
+  // Primary lead featured article
   const leadArticle = useMemo(() => {
     return ARTICLES.find((a) => a.featured) || ARTICLES[0];
   }, []);
-
-  // Filtered articles for the grid
-  const filteredArticles = useMemo(() => {
-    if (selectedCategory === 'All') {
-      return ARTICLES;
-    }
-    return ARTICLES.filter((a) => a.category === selectedCategory);
-  }, [selectedCategory]);
 
   // Compute counts for each category
   const articleCounts = useMemo(() => {
@@ -56,133 +65,323 @@ export default function App() {
     return counts;
   }, []);
 
-  // Handle URL hash routing on initial load and hash change
-  useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#article/')) {
-        const slug = hash.replace('#article/', '');
-        const matched = ARTICLES.find((a) => a.slug === slug);
-        if (matched) {
-          setCurrentArticle(matched);
-          setActiveView('article');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          return;
-        }
-      } else if (hash === '#about') {
-        setActiveView('about');
+  // Sync route and metadata
+  const applyMetadataForRoute = useCallback((route: Route) => {
+    switch (route.type) {
+      case 'article':
+        updatePageMetadata(
+          `${route.article.title} — TechPulse Daily`,
+          route.article.excerpt,
+          getArticleUrl(route.article.slug),
+          route.article.featuredImage,
+          route.article
+        );
+        break;
+      case 'category':
+        updatePageMetadata(
+          `${route.category} Stories & Breakthroughs — TechPulse Daily`,
+          `Explore the latest ${route.category} analysis, breakthrough reports, and expert guides from TechPulse Daily.`,
+          getCategoryUrl(route.category)
+        );
+        break;
+      case 'about':
+        updatePageMetadata(
+          'About TechPulse Daily — Making Technology Easier to Understand',
+          'Learn about our editorial mission, ethical tech coverage, and our staff of specialist journalists.',
+          getAboutUrl()
+        );
+        break;
+      case 'contact':
+        updatePageMetadata(
+          'Contact TechPulse Daily — Editorial Desk & Tips',
+          'Get in touch with our editorial desk, send news tips, or submit research inquiries.',
+          getContactUrl()
+        );
+        break;
+      case 'privacy':
+        updatePageMetadata(
+          'Privacy Policy & Reader Rights — TechPulse Daily',
+          'Our transparent commitment to reader privacy, zero data monetization, and civil tech rights.',
+          getPrivacyUrl()
+        );
+        break;
+      case 'search':
+        updatePageMetadata(
+          route.query
+            ? `Search: "${route.query}" — TechPulse Daily`
+            : 'Search Articles — TechPulse Daily',
+          'Search through in-depth technology essays, guides, and future forecasts.',
+          getSearchUrl(route.query)
+        );
+        break;
+      case 'not-found':
+        updatePageMetadata(
+          '404 Page Not Found — TechPulse Daily',
+          'The story or page you were looking for does not exist or may have moved.',
+          route.path
+        );
+        break;
+      case 'home':
+      default:
+        updatePageMetadata(
+          'TechPulse Daily — The Future of Technology Starts Today',
+          'Discover the latest ideas, innovations, AI breakthroughs, gadgets, and digital trends shaping the way we live and work.',
+          '/'
+        );
+        break;
+    }
+  }, []);
+
+  // Main client-side navigation dispatcher
+  const navigate = useCallback((url: string, replace = false, smoothScroll = true) => {
+    if (replace) {
+      window.history.replaceState(null, '', url);
+    } else {
+      window.history.pushState(null, '', url);
+    }
+
+    const newRoute = parseRoute(window.location.pathname, window.location.search, window.location.hash);
+    setCurrentRoute(newRoute);
+    applyMetadataForRoute(newRoute);
+
+    // Sync modal visibility based on route
+    if (newRoute.type === 'contact') {
+      setIsContactOpen(true);
+    } else if (newRoute.type === 'privacy') {
+      setIsPrivacyOpen(true);
+    } else if (newRoute.type === 'search') {
+      setSearchInitialQuery(newRoute.query);
+      setIsSearchOpen(true);
+    }
+
+    if (smoothScroll) {
+      if (window.location.hash === '#articles-section') {
+        setTimeout(() => {
+          const el = document.getElementById('articles-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 60);
+      } else {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        return;
+      }
+    }
+  }, [applyMetadataForRoute]);
+
+  // Initial load: parse route, normalize legacy hash if present, and update metadata
+  useEffect(() => {
+    const initialRoute = parseRoute(window.location.pathname, window.location.search, window.location.hash);
+    setCurrentRoute(initialRoute);
+    applyMetadataForRoute(initialRoute);
+
+    // If loaded with a legacy hash (e.g. #article/foo or #about), normalize to clean URL
+    if (window.location.hash) {
+      if (initialRoute.type === 'article') {
+        window.history.replaceState(null, '', getArticleUrl(initialRoute.article.slug));
+      } else if (initialRoute.type === 'about') {
+        window.history.replaceState(null, '', getAboutUrl());
+      } else if (initialRoute.type === 'contact') {
+        window.history.replaceState(null, '', getContactUrl());
+      } else if (initialRoute.type === 'privacy') {
+        window.history.replaceState(null, '', getPrivacyUrl());
+      }
+    }
+
+    // Direct modal routes
+    if (initialRoute.type === 'contact') {
+      setIsContactOpen(true);
+    } else if (initialRoute.type === 'privacy') {
+      setIsPrivacyOpen(true);
+    } else if (initialRoute.type === 'search') {
+      setSearchInitialQuery(initialRoute.query);
+      setIsSearchOpen(true);
+    }
+
+    // Handle browser Back and Forward button events
+    const handlePopState = () => {
+      const poppedRoute = parseRoute(window.location.pathname, window.location.search, window.location.hash);
+      setCurrentRoute(poppedRoute);
+      applyMetadataForRoute(poppedRoute);
+
+      if (poppedRoute.type === 'contact') {
+        setIsContactOpen(true);
+      } else {
+        setIsContactOpen(false);
+      }
+
+      if (poppedRoute.type === 'privacy') {
+        setIsPrivacyOpen(true);
+      } else {
+        setIsPrivacyOpen(false);
+      }
+
+      if (poppedRoute.type === 'search') {
+        setSearchInitialQuery(poppedRoute.query);
+        setIsSearchOpen(true);
+      } else {
+        setIsSearchOpen(false);
       }
     };
 
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [applyMetadataForRoute]);
 
-  // Update document title dynamically based on active view and state
-  useEffect(() => {
-    if (activeView === 'article' && currentArticle) {
-      document.title = `${currentArticle.title} — TechPulse Daily`;
-    } else if (activeView === 'about') {
-      document.title = 'About TechPulse Daily — Making Technology Easier to Understand';
-    } else if (selectedCategory !== 'All') {
-      document.title = `${selectedCategory} Stories & Breakthroughs — TechPulse Daily`;
-    } else {
-      document.title = 'TechPulse Daily — The Future of Technology Starts Today';
+  // Selected category in current view
+  const currentCategory: Category = useMemo(() => {
+    if (currentRoute.type === 'category') {
+      return currentRoute.category;
     }
-  }, [activeView, currentArticle, selectedCategory]);
+    return 'All';
+  }, [currentRoute]);
 
+  // Filtered articles based on selected category
+  const filteredArticles = useMemo(() => {
+    if (currentCategory === 'All') {
+      return ARTICLES;
+    }
+    return ARTICLES.filter((a) => a.category === currentCategory);
+  }, [currentCategory]);
+
+  // Navigation handlers
   const handleOpenArticle = (article: Article) => {
-    setCurrentArticle(article);
-    setActiveView('article');
-    window.location.hash = `#article/${article.slug}`;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigate(getArticleUrl(article.slug));
   };
 
   const handleNavigateHome = () => {
-    setActiveView('home');
-    window.location.hash = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigate('/');
   };
 
   const handleNavigateAbout = () => {
-    setActiveView('about');
-    window.location.hash = '#about';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigate(getAboutUrl());
   };
 
   const handleSelectCategory = (cat: Category) => {
-    setSelectedCategory(cat);
+    if (cat === 'All') {
+      navigate('/');
+    } else {
+      navigate(getCategoryUrl(cat));
+    }
   };
 
   const handleExploreClick = () => {
-    const el = document.getElementById('articles-section');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    if (currentRoute.type !== 'home' && currentRoute.type !== 'category') {
+      navigate('/#articles-section');
+    } else {
+      const el = document.getElementById('articles-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
   const handleSelectTopic = (cat: Category) => {
-    setSelectedCategory(cat);
-    if (activeView !== 'home') {
-      setActiveView('home');
-      window.location.hash = '';
-    }
+    navigate(getCategoryUrl(cat));
     setTimeout(() => {
       const el = document.getElementById('articles-section');
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 50);
+    }, 60);
+  };
+
+  const handleOpenSearchModal = () => {
+    setPreviousUrl(window.location.pathname + window.location.search);
+    setIsSearchOpen(true);
+    window.history.pushState(null, '', getSearchUrl());
+    applyMetadataForRoute({ type: 'search', query: '' });
+  };
+
+  const handleCloseSearchModal = () => {
+    setIsSearchOpen(false);
+    if (window.location.pathname === '/search') {
+      navigate(previousUrl || '/', true, false);
+    }
+  };
+
+  const handleSearchQueryChange = (q: string) => {
+    const url = getSearchUrl(q);
+    window.history.replaceState(null, '', url);
+    applyMetadataForRoute({ type: 'search', query: q });
+  };
+
+  const handleOpenContact = () => {
+    setPreviousUrl(window.location.pathname + window.location.search);
+    setIsContactOpen(true);
+    window.history.pushState(null, '', getContactUrl());
+    applyMetadataForRoute({ type: 'contact' });
+  };
+
+  const handleCloseContact = () => {
+    setIsContactOpen(false);
+    if (window.location.pathname === '/contact') {
+      navigate(previousUrl || '/', true, false);
+    }
+  };
+
+  const handleOpenPrivacy = () => {
+    setPreviousUrl(window.location.pathname + window.location.search);
+    setIsPrivacyOpen(true);
+    window.history.pushState(null, '', getPrivacyUrl());
+    applyMetadataForRoute({ type: 'privacy' });
+  };
+
+  const handleClosePrivacy = () => {
+    setIsPrivacyOpen(false);
+    if (window.location.pathname === '/privacy') {
+      navigate(previousUrl || '/', true, false);
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-indigo-500 selection:text-white">
       {/* Sticky Navigation Header */}
       <Header
-        currentCategory={selectedCategory}
+        currentCategory={currentCategory}
         onSelectCategory={handleSelectCategory}
-        activeView={activeView}
+        activeView={currentRoute.type}
         onNavigateHome={handleNavigateHome}
         onNavigateAbout={handleNavigateAbout}
-        onOpenSearch={() => setIsSearchOpen(true)}
+        onNavigateUrl={(url) => navigate(url)}
+        onOpenSearch={handleOpenSearchModal}
       />
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {activeView === 'article' && currentArticle ? (
+        {currentRoute.type === 'article' ? (
           <ArticlePage
-            article={currentArticle}
+            article={currentRoute.article}
             allArticles={ARTICLES}
             onBackToArticles={handleNavigateHome}
             onSelectArticle={handleOpenArticle}
-            onSelectCategory={(cat) => {
-              handleSelectCategory(cat);
-              handleNavigateHome();
-            }}
+            onSelectCategory={(cat) => handleSelectCategory(cat)}
           />
-        ) : activeView === 'about' ? (
+        ) : currentRoute.type === 'about' ? (
           <AboutPage
             onBackToArticles={handleNavigateHome}
-            onOpenContact={() => setIsContactOpen(true)}
+            onOpenContact={handleOpenContact}
+          />
+        ) : currentRoute.type === 'not-found' ? (
+          <NotFoundPage
+            attemptedPath={currentRoute.path}
+            onNavigateHome={handleNavigateHome}
+            onReadArticle={handleOpenArticle}
+            onOpenSearch={handleOpenSearchModal}
           />
         ) : (
-          /* Homepage View */
+          /* Homepage or Category Catalog View */
           <>
-            {/* Hero Section */}
+            {/* Hero Section (Shown on Homepage, or displays focused topic on category view) */}
             <Hero
               onExploreClick={handleExploreClick}
               onOpenTopic={handleSelectTopic}
-              selectedCategory={selectedCategory}
+              selectedCategory={currentCategory}
             />
 
-            {/* Featured Article Section (Shown when viewing All or AI) */}
-            {selectedCategory === 'All' && (
+            {/* Featured Article Section (Shown when viewing root homepage) */}
+            {currentCategory === 'All' && (
               <FeaturedArticle
                 article={leadArticle}
                 onReadArticle={handleOpenArticle}
+                onSelectCategory={handleSelectCategory}
               />
             )}
 
@@ -197,20 +396,20 @@ export default function App() {
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-1.5 h-6 bg-indigo-600 rounded-full" />
                     <h2 className="font-serif-editorial text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
-                      {selectedCategory === 'All' ? 'Latest Articles' : `${selectedCategory} Articles`}
+                      {currentCategory === 'All' ? 'Latest Articles' : `${currentCategory} Articles`}
                     </h2>
                   </div>
                   <p className="text-slate-600 text-sm max-w-xl">
-                    {selectedCategory === 'All'
-                      ? 'Browse our complete catalog of 11 in-depth technology essays, technical guides, and future forecasts.'
-                      : `Displaying stories categorized under ${selectedCategory}.`}
+                    {currentCategory === 'All'
+                      ? `Browse our complete catalog of ${ARTICLES.length} in-depth technology essays, guides, and forecasts.`
+                      : `Displaying stories categorized under ${currentCategory}.`}
                   </p>
                 </div>
 
-                {/* Category Filtering Bar */}
+                {/* Category Filtering Bar with Semantic Links */}
                 <div className="w-full md:w-auto">
                   <CategoryFilter
-                    selectedCategory={selectedCategory}
+                    selectedCategory={currentCategory}
                     onSelectCategory={handleSelectCategory}
                     articleCounts={articleCounts}
                   />
@@ -225,6 +424,7 @@ export default function App() {
                       key={article.id}
                       article={article}
                       onReadArticle={handleOpenArticle}
+                      onSelectCategory={handleSelectCategory}
                     />
                   ))}
                 </div>
@@ -237,12 +437,17 @@ export default function App() {
                   <p className="text-sm text-slate-500 mb-6">
                     Try switching to another category or resetting to All.
                   </p>
-                  <button
-                    onClick={() => setSelectedCategory('All')}
-                    className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors"
+                  <a
+                    href="/"
+                    onClick={(e) => {
+                      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                      e.preventDefault();
+                      handleSelectCategory('All');
+                    }}
+                    className="inline-block px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors"
                   >
                     View All Articles
-                  </button>
+                  </a>
                 </div>
               )}
             </section>
@@ -261,26 +466,29 @@ export default function App() {
         onNavigateHome={handleNavigateHome}
         onNavigateAbout={handleNavigateAbout}
         onSelectCategory={handleSelectCategory}
-        onOpenContact={() => setIsContactOpen(true)}
-        onOpenPrivacy={() => setIsPrivacyOpen(true)}
+        onOpenContact={handleOpenContact}
+        onOpenPrivacy={handleOpenPrivacy}
+        onNavigateUrl={(url) => navigate(url)}
       />
 
       {/* Global Interactive Modals */}
       <SearchModal
         isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
+        initialQuery={searchInitialQuery}
+        onClose={handleCloseSearchModal}
         articles={ARTICLES}
         onSelectArticle={handleOpenArticle}
+        onQueryChange={handleSearchQueryChange}
       />
 
       <ContactModal
         isOpen={isContactOpen}
-        onClose={() => setIsContactOpen(false)}
+        onClose={handleCloseContact}
       />
 
       <PrivacyModal
         isOpen={isPrivacyOpen}
-        onClose={() => setIsPrivacyOpen(false)}
+        onClose={handleClosePrivacy}
       />
     </div>
   );

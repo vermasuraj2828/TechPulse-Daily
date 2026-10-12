@@ -12,15 +12,16 @@ import {
   ThumbsUp,
   ImageOff
 } from 'lucide-react';
-import { Article } from '../types/blog';
+import { Article, Category } from '../types/blog';
 import { ArticleCard } from './ArticleCard';
+import { getArticleUrl, getCategoryUrl } from '../utils/router';
 
 interface ArticlePageProps {
   article: Article;
   allArticles: Article[];
   onBackToArticles: () => void;
   onSelectArticle: (article: Article) => void;
-  onSelectCategory: (category: any) => void;
+  onSelectCategory: (category: Category) => void;
 }
 
 export const ArticlePage: React.FC<ArticlePageProps> = ({
@@ -77,21 +78,22 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
     .sort((a, b) => (a.category === article.category ? -1 : 1))
     .slice(0, 3);
 
+  const canonicalArticleUrl = `${window.location.origin}${getArticleUrl(article.slug)}`;
+
   const handleCopyLink = () => {
-    const url = window.location.href;
-    navigator.clipboard?.writeText(url).catch(() => {});
+    navigator.clipboard?.writeText(canonicalArticleUrl).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShareTwitter = () => {
     const text = encodeURIComponent(`"${article.title}" on TechPulse Daily`);
-    const url = encodeURIComponent(window.location.href);
+    const url = encodeURIComponent(canonicalArticleUrl);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'noopener,noreferrer');
   };
 
   const handleShareLinkedIn = () => {
-    const url = encodeURIComponent(window.location.href);
+    const url = encodeURIComponent(canonicalArticleUrl);
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'noopener,noreferrer');
   };
 
@@ -119,13 +121,18 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
 
       {/* Top Navigation Bar */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10">
-        <button
-          onClick={onBackToArticles}
+        <a
+          href="/"
+          onClick={(e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            e.preventDefault();
+            onBackToArticles();
+          }}
           className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors group cursor-pointer mb-6"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Back to Articles</span>
-        </button>
+        </a>
       </div>
 
       {/* Main Article Container */}
@@ -134,15 +141,17 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
         <header className="mb-8">
           {/* Category kicker */}
           <div className="flex items-center gap-2 text-sm font-semibold text-indigo-600 mb-4">
-            <button
-              onClick={() => {
+            <a
+              href={getCategoryUrl(article.category)}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
                 onSelectCategory(article.category);
-                onBackToArticles();
               }}
               className="hover:underline cursor-pointer"
             >
               {article.category}
-            </button>
+            </a>
             <span className="text-slate-300" aria-hidden="true">/</span>
             <span className="text-slate-500 font-normal">In-Depth Editorial</span>
           </div>
@@ -371,20 +380,28 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
           <p className="text-sm text-slate-600 max-w-lg mx-auto mb-6">
             Dive deeper into artificial intelligence, hardware reviews, mobile ecosystems, and the emerging future of digital life.
           </p>
-          <button
-            onClick={onBackToArticles}
+          <a
+            href="/"
+            onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+              e.preventDefault();
+              onBackToArticles();
+            }}
             className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Browse All Articles</span>
-          </button>
+          </a>
         </div>
 
         {/* Previous / Next Article Navigation */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-10 pt-6 border-t border-slate-200">
           {prevArticle && (
-            <button
-              onClick={() => {
+            <a
+              href={getArticleUrl(prevArticle.slug)}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
                 onSelectArticle(prevArticle);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
@@ -400,12 +417,15 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
                 </h4>
               </div>
               <span className="text-xs text-slate-400 mt-3">{prevArticle.category}</span>
-            </button>
+            </a>
           )}
 
           {nextArticle && (
-            <button
-              onClick={() => {
+            <a
+              href={getArticleUrl(nextArticle.slug)}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
                 onSelectArticle(nextArticle);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
@@ -421,7 +441,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
                 </h4>
               </div>
               <span className="text-xs text-slate-400 mt-3">{nextArticle.category}</span>
-            </button>
+            </a>
           )}
         </div>
 

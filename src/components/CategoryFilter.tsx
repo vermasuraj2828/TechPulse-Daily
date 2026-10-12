@@ -1,6 +1,7 @@
 import React from 'react';
 import { Category } from '../types/blog';
 import { CATEGORIES } from '../data/articles';
+import { getCategoryUrl } from '../utils/router';
 
 interface CategoryFilterProps {
   selectedCategory: Category;
@@ -19,27 +20,33 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
         {CATEGORIES.map((category) => {
           const isSelected = selectedCategory === category;
           const count = articleCounts[category] || 0;
+          const url = getCategoryUrl(category);
 
           return (
-            <button
+            <a
               key={category}
-              onClick={() => onSelectCategory(category)}
+              href={url}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                onSelectCategory(category);
+              }}
               className={`px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all duration-150 cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 ${
                 isSelected
                   ? 'bg-white text-slate-900 shadow-sm font-semibold'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
               }`}
-              aria-pressed={isSelected}
+              aria-current={isSelected ? 'page' : undefined}
             >
               <span>{category}</span>
               <span
-                className={`text-[11px] font-mono-code tabular-nums px-1.5 py-0.2 rounded-md ${
+                className={`text-[11px] font-mono-code tabular-nums px-1.5 py-0.5 rounded-md ${
                   isSelected ? 'bg-slate-100 text-slate-700' : 'text-slate-400'
                 }`}
               >
                 {count}
               </span>
-            </button>
+            </a>
           );
         })}
       </div>

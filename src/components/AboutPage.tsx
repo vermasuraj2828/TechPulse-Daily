@@ -47,13 +47,18 @@ export const AboutPage: React.FC<AboutPageProps> = ({
     <div className="min-h-screen bg-white">
       {/* Top back navigation */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
-        <button
-          onClick={onBackToArticles}
+        <a
+          href="/"
+          onClick={(e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            e.preventDefault();
+            onBackToArticles();
+          }}
           className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors group cursor-pointer mb-8"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Back to TechPulse Daily</span>
-        </button>
+        </a>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-20">
@@ -218,13 +223,18 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               Our editors welcome tips, technical corrections, and scholarly perspectives.
             </p>
           </div>
-          <button
-            onClick={onOpenContact}
+          <a
+            href="/contact"
+            onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+              e.preventDefault();
+              onOpenContact();
+            }}
             className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-indigo-600 text-white font-medium text-sm rounded-xl transition-colors cursor-pointer shrink-0"
           >
             <Mail className="w-4 h-4" />
             <span>Contact Editors</span>
-          </button>
+          </a>
         </div>
       </div>
     </div>

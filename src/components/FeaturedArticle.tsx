@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
-import { ArrowRight, Clock, User, ImageOff } from 'lucide-react';
-import { Article } from '../types/blog';
+import { ArrowRight, Clock } from 'lucide-react';
+import { Article, Category } from '../types/blog';
+import { getArticleUrl, getCategoryUrl } from '../utils/router';
 
 interface FeaturedArticleProps {
   article: Article;
   onReadArticle: (article: Article) => void;
+  onSelectCategory?: (category: Category) => void;
 }
 
 export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
   article,
   onReadArticle,
+  onSelectCategory,
 }) => {
   const [imgSrc, setImgSrc] = useState(article.featuredImage);
   const [hasError, setHasError] = useState(false);
+
+  const articleUrl = getArticleUrl(article.slug);
+  const categoryUrl = getCategoryUrl(article.category);
 
   const handleImgError = () => {
     const filename = article.featuredImage.split('/').pop()?.split('?')[0];
@@ -20,6 +26,20 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
       setImgSrc(`/images/${filename}`);
     } else {
       setHasError(true);
+    }
+  };
+
+  const handleArticleClick = (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    onReadArticle(article);
+  };
+
+  const handleCategoryClick = (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (onSelectCategory) {
+      e.preventDefault();
+      onSelectCategory(article.category);
     }
   };
 
@@ -40,7 +60,12 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
       <div className="group relative bg-white border border-slate-200/90 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-lg transition-all duration-300">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
           {/* Large Image Column (7 cols on desktop) */}
-          <div className="lg:col-span-7 relative min-h-[300px] sm:min-h-[400px] lg:min-h-[480px] overflow-hidden bg-slate-900">
+          <a
+            href={articleUrl}
+            onClick={handleArticleClick}
+            className="lg:col-span-7 relative min-h-[300px] sm:min-h-[400px] lg:min-h-[480px] overflow-hidden bg-slate-900 block cursor-pointer"
+            aria-label={`Read featured article: ${article.title}`}
+          >
             {!hasError ? (
               <img
                 src={imgSrc}
@@ -58,14 +83,20 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
               </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent lg:hidden" />
-          </div>
+          </a>
 
           {/* Content Column (5 cols on desktop) */}
           <div className="lg:col-span-5 p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-white">
             <div>
               {/* Unboxed Metadata Line */}
               <div className="flex items-center gap-2 text-xs font-semibold text-indigo-600 mb-3 tracking-wide">
-                <span>{article.category}</span>
+                <a
+                  href={categoryUrl}
+                  onClick={handleCategoryClick}
+                  className="hover:underline cursor-pointer"
+                >
+                  {article.category}
+                </a>
                 <span className="text-slate-300" aria-hidden="true">·</span>
                 <span className="text-slate-500 font-normal">{article.date}</span>
                 <span className="text-slate-300" aria-hidden="true">·</span>
@@ -76,11 +107,14 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
               </div>
 
               {/* Title */}
-              <h3 
-                onClick={() => onReadArticle(article)}
-                className="font-serif-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 hover:text-indigo-600 transition-colors leading-[1.2] cursor-pointer mb-4 text-balance hover:underline underline-offset-6 decoration-indigo-300/80"
-              >
-                {article.title}
+              <h3 className="font-serif-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 leading-[1.2] mb-4 text-balance">
+                <a
+                  href={articleUrl}
+                  onClick={handleArticleClick}
+                  className="hover:text-indigo-600 transition-colors cursor-pointer hover:underline underline-offset-6 decoration-indigo-300/80"
+                >
+                  {article.title}
+                </a>
               </h3>
 
               {/* Short Description */}
@@ -116,13 +150,14 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
               </div>
 
               {/* Read Article Button */}
-              <button
-                onClick={() => onReadArticle(article)}
+              <a
+                href={articleUrl}
+                onClick={handleArticleClick}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-indigo-600 text-white font-medium text-sm rounded-xl transition-colors cursor-pointer group/btn"
               >
                 <span>Read Article</span>
                 <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-              </button>
+              </a>
             </div>
           </div>
         </div>

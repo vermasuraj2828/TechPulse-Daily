@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
-import { ArrowRight, Clock, ImageOff } from 'lucide-react';
-import { Article } from '../types/blog';
+import { ArrowRight, Clock } from 'lucide-react';
+import { Article, Category } from '../types/blog';
+import { getArticleUrl, getCategoryUrl } from '../utils/router';
 
 interface ArticleCardProps {
   article: Article;
   onReadArticle: (article: Article) => void;
+  onSelectCategory?: (category: Category) => void;
 }
 
 export const ArticleCard: React.FC<ArticleCardProps> = ({
   article,
   onReadArticle,
+  onSelectCategory,
 }) => {
   const [imgSrc, setImgSrc] = useState(article.featuredImage);
   const [hasError, setHasError] = useState(false);
+
+  const articleUrl = getArticleUrl(article.slug);
+  const categoryUrl = getCategoryUrl(article.category);
 
   const handleImgError = () => {
     const filename = article.featuredImage.split('/').pop()?.split('?')[0];
@@ -23,12 +29,28 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
     }
   };
 
+  const handleArticleClick = (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    onReadArticle(article);
+  };
+
+  const handleCategoryClick = (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (onSelectCategory) {
+      e.preventDefault();
+      onSelectCategory(article.category);
+    }
+  };
+
   return (
     <article className="group flex flex-col bg-white border border-slate-200/90 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all duration-300 h-full">
       {/* Featured Thumbnail */}
-      <div 
-        onClick={() => onReadArticle(article)}
-        className="relative aspect-[16/10] overflow-hidden bg-slate-900 cursor-pointer"
+      <a
+        href={articleUrl}
+        onClick={handleArticleClick}
+        className="relative aspect-[16/10] overflow-hidden bg-slate-900 cursor-pointer block"
+        aria-label={`Read article: ${article.title}`}
       >
         {!hasError ? (
           <img
@@ -46,14 +68,20 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             <span className="text-sm font-serif-editorial font-bold text-center text-slate-200 line-clamp-2 px-4 z-10">{article.title}</span>
           </div>
         )}
-      </div>
+      </a>
 
       {/* Card Body */}
       <div className="p-6 flex flex-col flex-1 justify-between">
         <div>
           {/* Metadata: Category · Date · Read Time (Zero-Pill Discipline) */}
           <div className="flex items-center gap-2 text-xs font-semibold text-indigo-600 mb-2.5">
-            <span>{article.category}</span>
+            <a
+              href={categoryUrl}
+              onClick={handleCategoryClick}
+              className="hover:underline cursor-pointer"
+            >
+              {article.category}
+            </a>
             <span className="text-slate-300" aria-hidden="true">·</span>
             <span className="text-slate-500 font-normal">{article.date}</span>
             <span className="text-slate-300" aria-hidden="true">·</span>
@@ -64,11 +92,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           </div>
 
           {/* Article Title */}
-          <h3 
-            onClick={() => onReadArticle(article)}
-            className="font-serif-editorial text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-[1.25] mb-3 cursor-pointer line-clamp-2 group-hover:underline underline-offset-4 decoration-indigo-300/80"
-          >
-            {article.title}
+          <h3 className="font-serif-editorial text-xl sm:text-2xl font-bold text-slate-900 leading-[1.25] mb-3 line-clamp-2">
+            <a
+              href={articleUrl}
+              onClick={handleArticleClick}
+              className="group-hover:text-indigo-600 transition-colors group-hover:underline underline-offset-4 decoration-indigo-300/80 cursor-pointer"
+            >
+              {article.title}
+            </a>
           </h3>
 
           {/* Short Excerpt */}
@@ -98,15 +129,16 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             </span>
           </div>
 
-          {/* Read More button */}
-          <button
-            onClick={() => onReadArticle(article)}
+          {/* Read More link */}
+          <a
+            href={articleUrl}
+            onClick={handleArticleClick}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 group-hover:text-indigo-700 hover:underline cursor-pointer"
             aria-label={`Read more: ${article.title}`}
           >
             <span>Read More</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </a>
         </div>
       </div>
     </article>

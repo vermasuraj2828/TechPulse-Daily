@@ -1,32 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Clock, ArrowRight, FileText } from 'lucide-react';
 import { Article } from '../types/blog';
+import { getArticleUrl } from '../utils/router';
 
 interface SearchModalProps {
   isOpen: boolean;
+  initialQuery?: string;
   onClose: () => void;
   articles: Article[];
   onSelectArticle: (article: Article) => void;
+  onQueryChange?: (query: string) => void;
 }
 
 export const SearchModal: React.FC<SearchModalProps> = ({
   isOpen,
+  initialQuery = '',
   onClose,
   articles,
   onSelectArticle,
+  onQueryChange,
 }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialQuery);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
+      if (initialQuery) {
+        setQuery(initialQuery);
+      }
       setTimeout(() => {
         inputRef.current?.focus();
+        inputRef.current?.select();
       }, 50);
     } else {
       setQuery('');
     }
-  }, [isOpen]);
+  }, [isOpen, initialQuery]);
 
   // Handle ESC key
   useEffect(() => {
@@ -34,18 +43,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       if (e.key === 'Escape' && isOpen) {
         onClose();
       }
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        if (isOpen) {
-          onClose();
-        } else {
-          // Trigger open
-        }
-      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
+
+  const handleInputChange = (val: string) => {
+    setQuery(val);
+    if (onQueryChange) {
+      onQueryChange(val);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -58,73 +66,69 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         const inExcerpt = article.excerpt.toLowerCase().includes(trimmed);
         const inLead = article.leadParagraph.toLowerCase().includes(trimmed);
         const inTags = article.tags.some((t) => t.toLowerCase().includes(trimmed));
-        const inSections = article.sections.some(
-          (s) =>
-            s.heading.toLowerCase().includes(trimmed) ||
-            s.paragraphs.some((p) => p.toLowerCase().includes(trimmed))
-        );
-        return inTitle || inCategory || inExcerpt || inLead || inTags || inSections;
+        return inTitle || inCategory || inExcerpt || inLead || inTags;
       })
     : [];
 
+  const handleArticleClick = (e: React.MouseEvent, article: Article) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    onSelectArticle(article);
+    onClose();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm p-4 sm:p-6 lg:p-20 flex items-start justify-center animate-in fade-in duration-150">
-      <div 
-        className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden relative flex flex-col max-h-[85vh]"
+    <div
+      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm p-4 sm:p-6 lg:p-8 flex items-start justify-center animate-in fade-in duration-150"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden mt-12 sm:mt-20 relative animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}
-        <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center gap-3 bg-slate-50/50">
-          <Search className="w-5 h-5 text-indigo-600 shrink-0" />
+        <div className="flex items-center px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50/50">
+          <Search className="w-5 h-5 text-slate-400 mr-3 shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search titles, categories, AI breakthroughs, gadgets..."
-            className="w-full bg-transparent border-none text-slate-900 placeholder-slate-400 text-base sm:text-lg focus:outline-none"
+            onChange={(e) => handleInputChange(e.target.value)}
+            placeholder="Search AI, gadgets, apps, technology essays..."
+            className="w-full bg-transparent border-0 focus:outline-none text-slate-900 placeholder:text-slate-400 text-base sm:text-lg"
             aria-label="Search articles"
           />
           {query ? (
             <button
-              onClick={() => setQuery('')}
+              onClick={() => handleInputChange('')}
               className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer"
-              aria-label="Clear search input"
+              aria-label="Clear query"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           ) : (
-            <kbd className="hidden sm:inline-block px-2 py-0.5 text-xs font-mono-code text-slate-400 bg-white border border-slate-200 rounded">
+            <kbd className="hidden sm:inline-block px-2 py-0.5 text-[11px] font-mono-code text-slate-400 bg-white border border-slate-200 rounded">
               ESC
             </kbd>
           )}
-          <button
-            onClick={onClose}
-            className="sm:hidden p-1 text-slate-400 hover:text-slate-600"
-            aria-label="Close modal"
-          >
-            <X className="w-5 h-5" />
-          </button>
         </div>
 
-        {/* Results Container */}
-        <div className="overflow-y-auto p-4 sm:p-6 flex-1 space-y-3">
+        {/* Search Results Area */}
+        <div className="max-h-[60vh] overflow-y-auto p-4 sm:p-6 divide-y divide-slate-100">
           {trimmed ? (
             filteredArticles.length > 0 ? (
               <div className="space-y-3">
-                <div className="flex items-center justify-between text-xs text-slate-400 font-medium px-1">
-                  <span>Found {filteredArticles.length} matching {filteredArticles.length === 1 ? 'article' : 'articles'}</span>
-                  <span>Press item to read</span>
+                <div className="flex items-center justify-between text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                  <span>Found {filteredArticles.length} Result{filteredArticles.length === 1 ? '' : 's'}</span>
+                  <span className="font-mono-code">“{query}”</span>
                 </div>
 
                 {filteredArticles.map((article) => (
-                  <div
+                  <a
                     key={article.id}
-                    onClick={() => {
-                      onSelectArticle(article);
-                      onClose();
-                    }}
-                    className="group p-4 rounded-xl border border-slate-200/90 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    href={getArticleUrl(article.slug)}
+                    onClick={(e) => handleArticleClick(e, article)}
+                    className="group p-4 rounded-xl border border-slate-200/90 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 block"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-xs font-semibold text-indigo-600">
@@ -151,7 +155,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       <span>Read</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
             ) : (
@@ -170,15 +174,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             )
           ) : (
             /* Suggested / Quick picks when empty */
-            <div className="py-4">
+            <div className="py-2">
               <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 px-1">
                 Suggested Topics to Search
               </div>
               <div className="flex flex-wrap gap-2 mb-6">
-                {['Artificial Intelligence', 'Smartphones', 'Productivity', 'Smart Homes', 'Search', 'Future Internet'].map((term) => (
+                {['Artificial Intelligence', 'Smartphones', 'Productivity', 'Smart Homes', 'Search', 'Wearables'].map((term) => (
                   <button
                     key={term}
-                    onClick={() => setQuery(term)}
+                    onClick={() => handleInputChange(term)}
                     className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-colors cursor-pointer"
                   >
                     {term}
@@ -190,35 +194,33 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 All {articles.length} Indexed Articles
               </div>
               <div className="space-y-2">
-                {articles.slice(0, 5).map((a) => (
-                  <button
-                    key={a.id}
-                    onClick={() => {
-                      onSelectArticle(a);
-                      onClose();
-                    }}
-                    className="w-full text-left p-2.5 rounded-lg hover:bg-slate-50 flex items-center justify-between text-xs sm:text-sm text-slate-700 hover:text-indigo-600 transition-colors cursor-pointer"
+                {articles.slice(0, 5).map((article) => (
+                  <a
+                    key={article.id}
+                    href={getArticleUrl(article.slug)}
+                    onClick={(e) => handleArticleClick(e, article)}
+                    className="flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 group transition-colors block"
                   >
-                    <span className="truncate pr-4 flex items-center gap-2">
-                      <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      {a.title}
-                    </span>
-                    <span className="text-slate-400 font-mono-code text-[11px] shrink-0">
-                      {a.category}
-                    </span>
-                  </button>
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors shrink-0" />
+                      <span className="text-sm text-slate-700 group-hover:text-indigo-600 transition-colors font-medium line-clamp-1">
+                        {article.title}
+                      </span>
+                    </div>
+                    <span className="text-xs text-slate-400 shrink-0 ml-4 font-mono-code">{article.category}</span>
+                  </a>
                 ))}
               </div>
             </div>
           )}
         </div>
 
-        {/* Footer info bar */}
-        <div className="p-3 bg-slate-50 border-t border-slate-200 text-center text-xs text-slate-400 flex items-center justify-between px-6">
-          <span>Search spans titles, summaries, topics, and full text</span>
+        {/* Footer */}
+        <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex items-center justify-between">
+          <span>Search matches titles, categories, tags, and full text</span>
           <button
             onClick={onClose}
-            className="text-slate-600 hover:text-slate-900 font-medium cursor-pointer"
+            className="text-xs text-slate-500 hover:text-slate-800 cursor-pointer font-medium"
           >
             Close
           </button>

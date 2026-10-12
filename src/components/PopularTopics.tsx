@@ -2,6 +2,7 @@ import React from 'react';
 import { Cpu, Smartphone, AppWindow, CheckCircle2, Sparkles, ArrowRight } from 'lucide-react';
 import { POPULAR_TOPICS } from '../data/articles';
 import { Category } from '../types/blog';
+import { getCategoryUrl } from '../utils/router';
 
 interface PopularTopicsProps {
   onSelectTopic: (category: Category) => void;
@@ -24,6 +25,12 @@ export const PopularTopics: React.FC<PopularTopicsProps> = ({ onSelectTopic }) =
     }
   };
 
+  const handleTopicClick = (e: React.MouseEvent, category: Category) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    onSelectTopic(category);
+  };
+
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 border-t border-slate-200/80">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
@@ -42,10 +49,12 @@ export const PopularTopics: React.FC<PopularTopicsProps> = ({ onSelectTopic }) =
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {POPULAR_TOPICS.map((topic) => (
-          <button
+          <a
             key={topic.name}
-            onClick={() => onSelectTopic(topic.category)}
-            className="group text-left p-5 bg-slate-50/70 hover:bg-white border border-slate-200/80 hover:border-indigo-200 rounded-xl hover:shadow-sm transition-all duration-200 flex flex-col justify-between cursor-pointer"
+            href={getCategoryUrl(topic.category)}
+            onClick={(e) => handleTopicClick(e, topic.category)}
+            className="group text-left p-5 bg-slate-50/70 hover:bg-white border border-slate-200/80 hover:border-indigo-200 rounded-xl hover:shadow-sm transition-all duration-200 flex flex-col justify-between cursor-pointer block"
+            aria-label={`Explore ${topic.name}`}
           >
             <div>
               <div className="w-10 h-10 rounded-lg bg-white border border-slate-200/80 flex items-center justify-center mb-4 group-hover:scale-105 group-hover:border-indigo-200 transition-all">
@@ -63,7 +72,7 @@ export const PopularTopics: React.FC<PopularTopicsProps> = ({ onSelectTopic }) =
               <span>{topic.count} {topic.count === 1 ? 'Article' : 'Articles'}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
-          </button>
+          </a>
         ))}
       </div>
     </section>

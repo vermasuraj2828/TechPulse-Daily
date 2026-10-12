@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUp } from 'lucide-react';
 import { Category } from '../types/blog';
+import { getCategoryUrl, getAboutUrl, getContactUrl, getPrivacyUrl } from '../utils/router';
 
 interface FooterProps {
   onNavigateHome: () => void;
@@ -8,6 +9,7 @@ interface FooterProps {
   onSelectCategory: (cat: Category) => void;
   onOpenContact: () => void;
   onOpenPrivacy: () => void;
+  onNavigateUrl?: (url: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -16,20 +18,41 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectCategory,
   onOpenContact,
   onOpenPrivacy,
+  onNavigateUrl,
 }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleArticlesClick = () => {
-    onSelectCategory('All');
-    onNavigateHome();
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    url: string,
+    action: () => void
+  ) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    if (onNavigateUrl) {
+      onNavigateUrl(url);
+    } else {
+      action();
+    }
+  };
+
+  const handleArticlesClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    if (onNavigateUrl) {
+      onNavigateUrl('/');
+    } else {
+      onSelectCategory('All');
+      onNavigateHome();
+    }
     setTimeout(() => {
       const el = document.getElementById('articles-section');
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 50);
+    }, 80);
   };
 
   return (
@@ -38,14 +61,22 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 pb-12 border-b border-slate-200">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-2.5 mb-3">
-              <span className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-sm">
+            <a
+              href="/"
+              onClick={(e) => handleLinkClick(e, '/', () => {
+                onSelectCategory('All');
+                onNavigateHome();
+                scrollToTop();
+              })}
+              className="flex items-center gap-2.5 mb-3 group"
+            >
+              <span className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:bg-indigo-700 transition-colors">
                 TP
               </span>
-              <span className="font-serif-editorial text-2xl font-bold tracking-tight text-slate-900">
+              <span className="font-serif-editorial text-2xl font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
                 TechPulse Daily
               </span>
-            </div>
+            </a>
             <p className="text-sm text-slate-500 leading-relaxed max-w-sm mb-6">
               “Making technology easier to understand.”
             </p>
@@ -54,201 +85,152 @@ export const Footer: React.FC<FooterProps> = ({
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Links with Unique URLs */}
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-900 mb-4">
               Publication
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <button
-                  onClick={() => {
+                <a
+                  href="/"
+                  onClick={(e) => handleLinkClick(e, '/', () => {
                     onNavigateHome();
                     scrollToTop();
-                  }}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
+                  })}
+                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left block"
                 >
                   Home
-                </button>
+                </a>
               </li>
               <li>
-                <button
+                <a
+                  href="/#articles-section"
                   onClick={handleArticlesClick}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
+                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left block"
                 >
-                  Articles
-                </button>
+                  Articles Catalog
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => {
+                <a
+                  href={getAboutUrl()}
+                  onClick={(e) => handleLinkClick(e, getAboutUrl(), () => {
                     onNavigateAbout();
                     scrollToTop();
-                  }}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
+                  })}
+                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left block"
                 >
-                  About
-                </button>
+                  About Us
+                </a>
               </li>
               <li>
-                <button
-                  onClick={onOpenContact}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
+                <a
+                  href={getContactUrl()}
+                  onClick={(e) => handleLinkClick(e, getContactUrl(), () => {
+                    onOpenContact();
+                  })}
+                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left block"
                 >
                   Contact
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={onOpenPrivacy}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
+                <a
+                  href={getPrivacyUrl()}
+                  onClick={(e) => handleLinkClick(e, getPrivacyUrl(), () => {
+                    onOpenPrivacy();
+                  })}
+                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left block"
                 >
                   Privacy Policy
-                </button>
+                </a>
               </li>
             </ul>
           </div>
 
-          {/* Topics */}
+          {/* Topics with Unique URLs */}
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-900 mb-4">
-              Topics
+              Categories
             </h4>
             <ul className="space-y-2.5 text-sm">
-              <li>
-                <button
-                  onClick={() => {
-                    onSelectCategory('AI');
-                    handleArticlesClick();
-                  }}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
-                >
-                  Artificial Intelligence
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => {
-                    onSelectCategory('Gadgets');
-                    handleArticlesClick();
-                  }}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
-                >
-                  Gadgets & Hardware
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => {
-                    onSelectCategory('Apps');
-                    handleArticlesClick();
-                  }}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
-                >
-                  Apps & Mobile Ecosystems
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => {
-                    onSelectCategory('Productivity');
-                    handleArticlesClick();
-                  }}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
-                >
-                  Digital Productivity
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => {
-                    onSelectCategory('Future');
-                    handleArticlesClick();
-                  }}
-                  className="hover:text-indigo-600 transition-colors cursor-pointer text-left"
-                >
-                  Future Technology
-                </button>
-              </li>
+              {[
+                { cat: 'AI' as Category, name: 'Artificial Intelligence', url: getCategoryUrl('AI') },
+                { cat: 'Gadgets' as Category, name: 'Gadgets & Hardware', url: getCategoryUrl('Gadgets') },
+                { cat: 'Apps' as Category, name: 'Apps & Mobile', url: getCategoryUrl('Apps') },
+                { cat: 'Productivity' as Category, name: 'Digital Productivity', url: getCategoryUrl('Productivity') },
+                { cat: 'Future' as Category, name: 'Future Technology', url: getCategoryUrl('Future') },
+              ].map((topic) => (
+                <li key={topic.name}>
+                  <a
+                    href={topic.url}
+                    onClick={(e) => handleLinkClick(e, topic.url, () => {
+                      onSelectCategory(topic.cat);
+                      onNavigateHome();
+                      scrollToTop();
+                    })}
+                    className="hover:text-indigo-600 transition-colors cursor-pointer text-left block"
+                  >
+                    {topic.name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Social Presence */}
+          {/* Connect / Social Presence */}
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-900 mb-4">
               Connect
             </h4>
-            <div className="flex flex-col space-y-3">
+            <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+              Follow our daily dispatches across social platforms.
+            </p>
+            <div className="flex items-center gap-3">
               <a
-                href="https://x.com"
+                href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm hover:text-indigo-600 transition-colors group"
-                aria-label="X (formerly Twitter)"
+                className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-indigo-600 hover:border-indigo-300 transition-colors"
+                aria-label="TechPulse Daily on X (Twitter)"
               >
-                <span className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-700 group-hover:border-indigo-300">
-                  𝕏
-                </span>
-                <span>Follow on X</span>
+                <span className="font-bold text-xs">𝕏</span>
               </a>
-
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm hover:text-indigo-600 transition-colors group"
-                aria-label="Instagram"
+                className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-indigo-600 hover:border-indigo-300 transition-colors text-xs font-bold"
+                aria-label="TechPulse Daily on Instagram"
               >
-                <span className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-700 group-hover:border-indigo-300">
-                  IG
-                </span>
-                <span>Instagram</span>
+                IG
               </a>
-
               <a
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm hover:text-indigo-600 transition-colors group"
-                aria-label="LinkedIn"
+                className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-indigo-600 hover:border-indigo-300 transition-colors text-xs font-bold"
+                aria-label="TechPulse Daily on LinkedIn"
               >
-                <span className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-700 group-hover:border-indigo-300">
-                  in
-                </span>
-                <span>LinkedIn</span>
-              </a>
-
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm hover:text-indigo-600 transition-colors group"
-                aria-label="YouTube"
-              >
-                <span className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-700 group-hover:border-indigo-300">
-                  YT
-                </span>
-                <span>YouTube</span>
+                IN
               </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Back to Top */}
+        {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>
-            © 2026 TechPulse Daily. All rights reserved.
+            © {new Date().getFullYear()} TechPulse Daily. All rights reserved. Content crafted for curious minds.
           </div>
-
           <div className="flex items-center gap-6">
-            <span className="hidden sm:inline">Written & Curated for Modern Technologists</span>
             <button
               onClick={scrollToTop}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 transition-colors cursor-pointer"
-              aria-label="Back to top"
+              className="inline-flex items-center gap-1.5 hover:text-indigo-600 transition-colors cursor-pointer"
             >
-              <span>Back to Top</span>
               <ArrowUp className="w-3.5 h-3.5" />
+              <span>Back to Top</span>
             </button>
           </div>
         </div>
