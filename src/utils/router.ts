@@ -1,5 +1,6 @@
 import { Category, Article } from '../types/blog';
 import { ARTICLES, CATEGORIES } from '../data/articles';
+import { formatMetaDescription } from './metaDescriptionRules';
 
 export type Route =
   | { type: 'home'; category: 'All' }
@@ -182,23 +183,34 @@ export function updatePageMetadata(
   }
   ogUrlEl.setAttribute('content', fullCanonicalUrl);
 
-  // 5. Meta Description
+  // 5. Meta Description (strictly verified against 120-158 length rule and formatting)
+  const validDescription = formatMetaDescription(description);
+
   let descEl = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-  if (descEl) {
-    descEl.setAttribute('content', description);
+  if (!descEl) {
+    descEl = document.createElement('meta');
+    descEl.setAttribute('name', 'description');
+    document.head.appendChild(descEl);
   }
+  descEl.setAttribute('content', validDescription);
 
   // 6. OG Title
   let ogTitleEl = document.querySelector('meta[property="og:title"]') as HTMLMetaElement | null;
-  if (ogTitleEl) {
-    ogTitleEl.setAttribute('content', title);
+  if (!ogTitleEl) {
+    ogTitleEl = document.createElement('meta');
+    ogTitleEl.setAttribute('property', 'og:title');
+    document.head.appendChild(ogTitleEl);
   }
+  ogTitleEl.setAttribute('content', title);
 
   // 7. OG Description
   let ogDescEl = document.querySelector('meta[property="og:description"]') as HTMLMetaElement | null;
-  if (ogDescEl) {
-    ogDescEl.setAttribute('content', description);
+  if (!ogDescEl) {
+    ogDescEl = document.createElement('meta');
+    ogDescEl.setAttribute('property', 'og:description');
+    document.head.appendChild(ogDescEl);
   }
+  ogDescEl.setAttribute('content', validDescription);
 
   // 8. OG Image
   if (ogImage) {
@@ -243,7 +255,7 @@ export function updatePageMetadata(
     twDescEl.setAttribute('name', 'twitter:description');
     document.head.appendChild(twDescEl);
   }
-  twDescEl.setAttribute('content', description);
+  twDescEl.setAttribute('content', validDescription);
 
   // 10. Structured Data JSON-LD
   let schemaScript = document.getElementById('techpulse-schema') as HTMLScriptElement | null;

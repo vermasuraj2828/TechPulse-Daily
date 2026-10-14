@@ -179,7 +179,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     featuredImage: smartphonesImg,
     imageCaption: 'The next decade of smartphones will prioritize structural transformation, solid-state chemistry, and ambient intelligence.',
-    excerpt: 'Explore the engineering breakthroughs destined to redefine smartphones: tri-fold form factors, silicon-carbon batteries, quantum camera sensors, and direct-to-cell satellite data.',
+    excerpt: 'Explore the breakthroughs redefining smartphones: tri-fold displays, silicon-carbon batteries, quantum camera sensors, and direct satellite connectivity.',
     leadParagraph: 'For several years, consumer technology critics lamented that the smartphone had plateaued. Rectangular slabs of glass grew imperceptibly faster each autumn, camera lenses gained minor megapixel bumps, and screen bezels receded by fractions of a millimeter. Yet beneath this surface tranquility, massive chemical, optical, and architectural transformations have been simmering in global research labs.',
     sections: [
       {
@@ -248,7 +248,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     featuredImage: roboticsImg,
     imageCaption: 'Collaborative digital pipelines are shifting human roles from repetitive synthesis to strategic direction and verification.',
-    excerpt: 'An in-depth analysis of how generative AI, autonomous software agents, and enterprise automation are restructuring knowledge work, corporate roles, and operational velocity.',
+    excerpt: 'Discover how generative AI, autonomous software agents, and enterprise automation are fundamentally restructuring modern knowledge work and corporate roles.',
     leadParagraph: 'Throughout industrial history, technological breakthroughs transformed physical labor: the steam engine replaced muscle power, electricity illuminated factory floors, and automated assembly lines accelerated physical manufacturing. In our current era, artificial intelligence is delivering the first true structural revolution to knowledge work, reshaping how organizations think, collaborate, and execute.',
     sections: [
       {
@@ -317,7 +317,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     featuredImage: productivityImg,
     imageCaption: 'Cultivating deliberate stillness and structural boundaries amidst an environment of constant digital noise.',
-    excerpt: 'Actionable strategies for mastering deep work: asynchronous communication protocols, ruthless notification triage, batch processing, and physical environment design.',
+    excerpt: 'Learn actionable strategies for mastering deep work: asynchronous communication protocols, ruthless notification triage, and focused physical workspaces.',
     leadParagraph: 'Modern digital life is engineered for distraction. Trillions of dollars of venture capital and thousands of behavioral psychologists have fine-tuned our notification feeds, social apps, and collaborative chat platforms to harvest human attention. In such an ecosystem, productivity is no longer a matter of willpower or downloading another checklist app; it is a defensive martial art of cognitive sovereignty.',
     sections: [
       {
@@ -386,7 +386,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     featuredImage: smartHomeImg,
     imageCaption: 'The modern smart home balances invisible automation with rigorous local data security and natural materiality.',
-    excerpt: 'How unified IoT standards, local neural processing, circadian lighting, and smart energy grids are turning houses into intuitive living environments.',
+    excerpt: 'Discover how unified Matter standards, local neural processing, circadian lighting, and smart energy grids turn houses into intuitive living environments.',
     leadParagraph: 'A decade ago, the promise of the smart home was often marred by frustrating fragmentation. Homeowners found themselves trapped in competing walled gardens, juggling six proprietary apps just to dim living room bulbs or adjust a thermostat, while devices frequently unlinked themselves after router reboots. Today, the smart home has graduated from fragile novelty gadgets into a mature, cohesive architectural discipline.',
     sections: [
       {
@@ -455,7 +455,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     featuredImage: aiSearchImg,
     imageCaption: 'Search is shifting from rigid keyword matching to multi-dimensional semantic dialogue and synthesized answers.',
-    excerpt: 'An investigation into the foundational shift from keyword-based web indices to direct answer synthesis, grounded citations, and multimodal search engines.',
+    excerpt: 'Explore the paradigm shift from keyword web indices to generative answer synthesis, real-time grounded citations, and multimodal search engines today.',
     leadParagraph: 'Since the dawn of the commercial World Wide Web in the late 1990s, the paradigm of finding information online remained fundamentally static: a user typed three or four keywords into a minimalist text box, an index of inverted tables retrieved matching documents, and the screen presented ten blue links with brief text snippets. That twenty-five-year regime has officially come to an end.',
     sections: [
       {
@@ -524,7 +524,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     featuredImage: roboticsImg,
     imageCaption: 'The convergence of robotics, bio-computation, and quantum physics is accelerating technological timelines.',
-    excerpt: 'A comprehensive roadmap across ten foundational technology frontiers poised to redefine industry, healthcare, energy, and civilization over the coming decade.',
+    excerpt: 'Explore ten foundational technology frontiers poised to redefine global industry, preventative healthcare, clean energy, and computing over the next decade.',
     leadParagraph: 'We live in an extraordinary historical epoch where multiple deep technological trajectories are converging simultaneously. Innovations in computational hardware are unlocking breakthroughs in molecular biology; advances in clean battery chemistry are empowering autonomous robotic transport; and new quantum principles are illuminating the nature of material simulation. Looking forward, ten defining technological trends will shape humanity’s trajectory over the next ten years.',
     sections: [
       {
@@ -619,7 +619,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     featuredImage: smartphonesImg,
     imageCaption: 'The smartphone application ecosystem condensed entire physical industries into a single glass slate.',
-    excerpt: 'A comprehensive retrospective on how the mobile app ecosystem dismantled physical barriers in banking, transportation, social life, and healthcare.',
+    excerpt: 'Discover how the mobile app revolution dismantled physical barriers across personal banking, urban transit, global social networks, and modern healthcare.',
     leadParagraph: 'When Steve Jobs introduced the App Store in 2008 with a modest catalog of roughly five hundred applications, few observers anticipated that software downloaded onto a touch-screen device would fundamentally rewrite modern civilization’s economic, cultural, and behavioral DNA. In less than two decades, the mobile application transformed from a convenient utility into the primary operating system of human society.',
     sections: [
       {
@@ -687,7 +687,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     featuredImage: aiSearchImg,
     imageCaption: 'The future internet will transform from a catalog of static web pages into an adaptive, conversational fabric.',
-    excerpt: 'A visionary exploration of the next digital era: generative user interfaces, decentralized verifiable identity, spatial web standards, and the preservation of authentic human community.',
+    excerpt: 'Explore the next digital era: generative user interfaces, decentralized verifiable identity, spatial web standards, and authentic human community online.',
     leadParagraph: 'If a web developer from 1996 traveled forward thirty years to examine modern web applications, they would recognize the fundamental structural bones: HTML documents, URLs, stylesheets, and client-server architectures. But looking forward to the next thirty years, the underlying assumptions of what constitutes the "Internet" are dissolving. The web is transitioning from a static repository of human-authored documents into an adaptive, intelligent, and spatial reality.',
     sections: [
       {
@@ -756,7 +756,7 @@ export const ARTICLES: Article[] = [
     featured: false,
     featuredImage: wearablesImg,
     imageCaption: 'The convergence of waveguide micro-optics and continuous physiological sensors is redefining the boundary of personal hardware.',
-    excerpt: 'An investigative look at how smart glasses, smart rings, directional audio transducers, and non-invasive metabolic telemetry are liberating humans from glowing smartphone glass.',
+    excerpt: 'Discover how smart glasses, neural rings, and non-invasive metabolic telemetry are liberating users from glowing smartphone screens into ambient computing.',
     leadParagraph: 'For the past decade, consumer wearables were largely synonymous with the rectangular or circular smartwatch: a miniaturized smartphone display strapped to the wrist that mirrored notification banners, counted steps, and demanded nightly charging cycles. While smartwatches established personal biometric awareness, they remained inherently interruptive. Today, hardware engineering is undergoing a quiet revolution: wearable devices are shedding glowing displays and bulky touchscreens, dissolving into the natural accessories humans already wear.',
     sections: [
       {

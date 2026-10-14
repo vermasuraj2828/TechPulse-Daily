@@ -28,6 +28,7 @@ import {
   updatePageMetadata,
 } from './utils/router';
 import { getRouteTitle } from './utils/titleRules';
+import { getRouteMetaDescription } from './utils/metaDescriptionRules';
 
 export default function App() {
   // Current active structured route
@@ -72,7 +73,7 @@ export default function App() {
       case 'article':
         updatePageMetadata(
           getRouteTitle('article', { slug: route.article.slug, articleTitle: route.article.title }),
-          route.article.excerpt,
+          getRouteMetaDescription('article', { slug: route.article.slug, excerpt: route.article.excerpt }),
           getArticleUrl(route.article.slug),
           route.article.featuredImage,
           route.article
@@ -81,42 +82,42 @@ export default function App() {
       case 'category':
         updatePageMetadata(
           getRouteTitle('category', { category: route.category }),
-          `Explore the latest ${route.category} analysis, breakthrough reports, and expert guides from TechPulse Daily.`,
+          getRouteMetaDescription('category', { category: route.category }),
           getCategoryUrl(route.category)
         );
         break;
       case 'about':
         updatePageMetadata(
           getRouteTitle('about'),
-          'Learn about our editorial mission, ethical tech coverage, and our staff of specialist journalists.',
+          getRouteMetaDescription('about'),
           getAboutUrl()
         );
         break;
       case 'contact':
         updatePageMetadata(
           getRouteTitle('contact'),
-          'Get in touch with our editorial desk, send news tips, or submit research inquiries.',
+          getRouteMetaDescription('contact'),
           getContactUrl()
         );
         break;
       case 'privacy':
         updatePageMetadata(
           getRouteTitle('privacy'),
-          'Our transparent commitment to reader privacy, zero data monetization, and civil tech rights.',
+          getRouteMetaDescription('privacy'),
           getPrivacyUrl()
         );
         break;
       case 'search':
         updatePageMetadata(
           getRouteTitle('search', { query: route.query }),
-          'Search through in-depth technology essays, guides, and future forecasts.',
+          getRouteMetaDescription('search', { query: route.query }),
           getSearchUrl(route.query)
         );
         break;
       case 'not-found':
         updatePageMetadata(
           getRouteTitle('not-found'),
-          'The story or page you were looking for does not exist or may have moved.',
+          getRouteMetaDescription('not-found'),
           route.path
         );
         break;
@@ -124,7 +125,7 @@ export default function App() {
       default:
         updatePageMetadata(
           getRouteTitle('home'),
-          'Discover the latest ideas, innovations, AI breakthroughs, gadgets, and digital trends shaping the way we live and work.',
+          getRouteMetaDescription('home'),
           '/'
         );
         break;
