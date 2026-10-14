@@ -210,9 +210,42 @@ export function updatePageMetadata(
     }
     const fullImgUrl = ogImage.startsWith('http') ? ogImage : `${origin}${ogImage}`;
     ogImgEl.setAttribute('content', fullImgUrl);
+
+    let twImgEl = document.querySelector('meta[name="twitter:image"]') as HTMLMetaElement | null;
+    if (!twImgEl) {
+      twImgEl = document.createElement('meta');
+      twImgEl.setAttribute('name', 'twitter:image');
+      document.head.appendChild(twImgEl);
+    }
+    twImgEl.setAttribute('content', fullImgUrl);
   }
 
-  // 9. Structured Data JSON-LD
+  // 9. Site Name & Twitter Meta
+  let siteNameEl = document.querySelector('meta[property="og:site_name"]') as HTMLMetaElement | null;
+  if (!siteNameEl) {
+    siteNameEl = document.createElement('meta');
+    siteNameEl.setAttribute('property', 'og:site_name');
+    document.head.appendChild(siteNameEl);
+  }
+  siteNameEl.setAttribute('content', 'TechPulse Daily');
+
+  let twTitleEl = document.querySelector('meta[name="twitter:title"]') as HTMLMetaElement | null;
+  if (!twTitleEl) {
+    twTitleEl = document.createElement('meta');
+    twTitleEl.setAttribute('name', 'twitter:title');
+    document.head.appendChild(twTitleEl);
+  }
+  twTitleEl.setAttribute('content', title);
+
+  let twDescEl = document.querySelector('meta[name="twitter:description"]') as HTMLMetaElement | null;
+  if (!twDescEl) {
+    twDescEl = document.createElement('meta');
+    twDescEl.setAttribute('name', 'twitter:description');
+    document.head.appendChild(twDescEl);
+  }
+  twDescEl.setAttribute('content', description);
+
+  // 10. Structured Data JSON-LD
   let schemaScript = document.getElementById('techpulse-schema') as HTMLScriptElement | null;
   if (!schemaScript) {
     schemaScript = document.createElement('script');

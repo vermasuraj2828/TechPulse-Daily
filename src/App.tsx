@@ -27,6 +27,7 @@ import {
   getSearchUrl,
   updatePageMetadata,
 } from './utils/router';
+import { getRouteTitle } from './utils/titleRules';
 
 export default function App() {
   // Current active structured route
@@ -70,7 +71,7 @@ export default function App() {
     switch (route.type) {
       case 'article':
         updatePageMetadata(
-          `${route.article.title} — TechPulse Daily`,
+          getRouteTitle('article', { slug: route.article.slug, articleTitle: route.article.title }),
           route.article.excerpt,
           getArticleUrl(route.article.slug),
           route.article.featuredImage,
@@ -79,44 +80,42 @@ export default function App() {
         break;
       case 'category':
         updatePageMetadata(
-          `${route.category} Stories & Breakthroughs — TechPulse Daily`,
+          getRouteTitle('category', { category: route.category }),
           `Explore the latest ${route.category} analysis, breakthrough reports, and expert guides from TechPulse Daily.`,
           getCategoryUrl(route.category)
         );
         break;
       case 'about':
         updatePageMetadata(
-          'About TechPulse Daily — Making Technology Easier to Understand',
+          getRouteTitle('about'),
           'Learn about our editorial mission, ethical tech coverage, and our staff of specialist journalists.',
           getAboutUrl()
         );
         break;
       case 'contact':
         updatePageMetadata(
-          'Contact TechPulse Daily — Editorial Desk & Tips',
+          getRouteTitle('contact'),
           'Get in touch with our editorial desk, send news tips, or submit research inquiries.',
           getContactUrl()
         );
         break;
       case 'privacy':
         updatePageMetadata(
-          'Privacy Policy & Reader Rights — TechPulse Daily',
+          getRouteTitle('privacy'),
           'Our transparent commitment to reader privacy, zero data monetization, and civil tech rights.',
           getPrivacyUrl()
         );
         break;
       case 'search':
         updatePageMetadata(
-          route.query
-            ? `Search: "${route.query}" — TechPulse Daily`
-            : 'Search Articles — TechPulse Daily',
+          getRouteTitle('search', { query: route.query }),
           'Search through in-depth technology essays, guides, and future forecasts.',
           getSearchUrl(route.query)
         );
         break;
       case 'not-found':
         updatePageMetadata(
-          '404 Page Not Found — TechPulse Daily',
+          getRouteTitle('not-found'),
           'The story or page you were looking for does not exist or may have moved.',
           route.path
         );
@@ -124,7 +123,7 @@ export default function App() {
       case 'home':
       default:
         updatePageMetadata(
-          'TechPulse Daily — The Future of Technology Starts Today',
+          getRouteTitle('home'),
           'Discover the latest ideas, innovations, AI breakthroughs, gadgets, and digital trends shaping the way we live and work.',
           '/'
         );
