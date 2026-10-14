@@ -291,8 +291,7 @@ export function updatePageMetadata(
   }
 
   if (article) {
-    schemaScript.textContent = JSON.stringify({
-      '@context': 'https://schema.org',
+    const newsArticleSchema = {
       '@type': 'NewsArticle',
       headline: article.title,
       description: article.excerpt,
@@ -318,7 +317,75 @@ export function updatePageMetadata(
         '@type': 'WebPage',
         '@id': fullCanonicalUrl,
       },
-    });
+    };
+
+    // Extract questions and answers for AEO / Schema.org FAQPage
+    const faqEntities: Array<{
+      '@type': 'Question';
+      name: string;
+      acceptedAnswer: {
+        '@type': 'Answer';
+        text: string;
+      };
+    }> = [];
+
+    for (const section of article.sections) {
+      if (section.heading.endsWith('?')) {
+        const directAnswer = section.paragraphs.find((p) => p.startsWith('Direct Answer:'));
+        const answerText = directAnswer
+          ? directAnswer.replace(/^Direct Answer:\s*/, '')
+          : section.paragraphs[0];
+
+        faqEntities.push({
+          '@type': 'Question',
+          name: section.heading,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: answerText,
+          },
+        });
+      }
+
+      // Check for inline Question: / Answer: pairs
+      for (let i = 0; i < section.paragraphs.length; i++) {
+        const p = section.paragraphs[i];
+        if (p.startsWith('Question:')) {
+          const qText = p.replace(/^Question:\s*/, '');
+          const nextP = section.paragraphs[i + 1];
+          const aText = nextP && nextP.startsWith('Answer:')
+            ? nextP.replace(/^Answer:\s*/, '')
+            : (nextP || '');
+          if (qText && aText) {
+            faqEntities.push({
+              '@type': 'Question',
+              name: qText,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: aText,
+              },
+            });
+          }
+        }
+      }
+    }
+
+    if (faqEntities.length > 0) {
+      schemaScript.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          newsArticleSchema,
+          {
+            '@type': 'FAQPage',
+            mainEntity: faqEntities,
+          },
+        ],
+      });
+    } else {
+      schemaScript.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        ...newsArticleSchema,
+      });
+    }
   } else {
     schemaScript.textContent = JSON.stringify({
       '@context': 'https://schema.org',

@@ -140,7 +140,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
         {/* Header Metadata */}
         <header className="mb-8">
           {/* Category kicker */}
-          <div className="flex items-center gap-2 text-sm font-semibold text-indigo-600 mb-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-indigo-600 mb-4 flex-wrap">
             <a
               href={getCategoryUrl(article.category)}
               onClick={(e) => {
@@ -154,6 +154,15 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
             </a>
             <span className="text-slate-300" aria-hidden="true">/</span>
             <span className="text-slate-500 font-normal">In-Depth Editorial</span>
+            {article.slug === 'the-rise-of-ai-powered-search' && (
+              <>
+                <span className="text-slate-300" aria-hidden="true">/</span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/90">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  AEO Q&amp;A Format
+                </span>
+              </>
+            )}
           </div>
 
           {/* Large Title */}
@@ -327,11 +336,66 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
                 {section.heading}
               </h2>
 
-              {section.paragraphs.map((p, pIdx) => (
-                <p key={pIdx} className="text-base sm:text-lg text-slate-700 leading-relaxed font-sans-ui">
-                  {p}
-                </p>
-              ))}
+              {section.paragraphs.map((p, pIdx) => {
+                if (p.startsWith('Direct Answer:')) {
+                  const content = p.replace(/^Direct Answer:\s*/, '');
+                  return (
+                    <div
+                      key={pIdx}
+                      className="p-4 sm:p-5 my-3 rounded-xl bg-emerald-50/90 border border-emerald-200/90 text-slate-800 shadow-xs"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-emerald-700 text-white font-sans-ui">
+                          Direct Answer
+                        </span>
+                        <span className="text-xs font-semibold text-emerald-800 font-sans-ui">
+                          AEO Quick Synthesis
+                        </span>
+                      </div>
+                      <p className="text-base sm:text-lg font-medium text-slate-900 leading-relaxed font-sans-ui">
+                        {content}
+                      </p>
+                    </div>
+                  );
+                }
+
+                if (p.startsWith('Question:')) {
+                  const content = p.replace(/^Question:\s*/, '');
+                  return (
+                    <h3
+                      key={pIdx}
+                      className="text-lg sm:text-xl font-bold text-slate-900 pt-3 pb-1 flex items-baseline gap-2 font-serif-editorial"
+                    >
+                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-bold bg-indigo-100 text-indigo-700 shrink-0 font-sans-ui">
+                        Q
+                      </span>
+                      <span>{content}</span>
+                    </h3>
+                  );
+                }
+
+                if (p.startsWith('Answer:')) {
+                  const content = p.replace(/^Answer:\s*/, '');
+                  return (
+                    <div key={pIdx} className="pl-4 sm:pl-5 border-l-2 border-indigo-200/80 my-2">
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-700 font-sans-ui">
+                          Answer
+                        </span>
+                      </div>
+                      <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-sans-ui">
+                        {content}
+                      </p>
+                    </div>
+                  );
+                }
+
+                return (
+                  <p key={pIdx} className="text-base sm:text-lg text-slate-700 leading-relaxed font-sans-ui">
+                    {p}
+                  </p>
+                );
+              })}
 
               {/* Optional Section Bullets */}
               {section.bulletPoints && section.bulletPoints.length > 0 && (
