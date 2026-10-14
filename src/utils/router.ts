@@ -212,7 +212,7 @@ export function updatePageMetadata(
   }
   ogDescEl.setAttribute('content', validDescription);
 
-  // 8. OG Image
+  // 8. OG Image & Image Alt Text (Social Card & Image SEO)
   if (ogImage) {
     let ogImgEl = document.querySelector('meta[property="og:image"]') as HTMLMetaElement | null;
     if (!ogImgEl) {
@@ -230,6 +230,30 @@ export function updatePageMetadata(
       document.head.appendChild(twImgEl);
     }
     twImgEl.setAttribute('content', fullImgUrl);
+
+    // og:image:alt and twitter:image:alt for accessibility and rich crawlers
+    const imgAltText = article?.imageAlt || article?.title || 'TechPulse Daily editorial cover visual';
+
+    let ogImgAltEl = document.querySelector('meta[property="og:image:alt"]') as HTMLMetaElement | null;
+    if (!ogImgAltEl) {
+      ogImgAltEl = document.createElement('meta');
+      ogImgAltEl.setAttribute('property', 'og:image:alt');
+      document.head.appendChild(ogImgAltEl);
+    }
+    ogImgAltEl.setAttribute('content', imgAltText);
+
+    let twImgAltEl = document.querySelector('meta[name="twitter:image:alt"]') as HTMLMetaElement | null;
+    if (!twImgAltEl) {
+      twImgAltEl = document.createElement('meta');
+      twImgAltEl.setAttribute('name', 'twitter:image:alt');
+      document.head.appendChild(twImgAltEl);
+    }
+    twImgAltEl.setAttribute('content', imgAltText);
+  } else {
+    document.querySelector('meta[property="og:image"]')?.remove();
+    document.querySelector('meta[name="twitter:image"]')?.remove();
+    document.querySelector('meta[property="og:image:alt"]')?.remove();
+    document.querySelector('meta[name="twitter:image:alt"]')?.remove();
   }
 
   // 9. Site Name & Twitter Meta
@@ -272,7 +296,12 @@ export function updatePageMetadata(
       '@type': 'NewsArticle',
       headline: article.title,
       description: article.excerpt,
-      image: [article.featuredImage.startsWith('http') ? article.featuredImage : `${origin}${article.featuredImage}`],
+      image: {
+        '@type': 'ImageObject',
+        url: article.featuredImage.startsWith('http') ? article.featuredImage : `${origin}${article.featuredImage}`,
+        caption: article.imageCaption,
+        description: article.imageAlt || article.title,
+      },
       datePublished: article.date,
       dateModified: article.date,
       author: {

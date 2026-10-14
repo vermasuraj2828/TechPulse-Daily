@@ -175,7 +175,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
                 </span>
                 <img
                   src={article.author.avatar}
-                  alt={article.author.name}
+                  alt={article.author.avatarAlt || `Portrait of ${article.author.name}, ${article.author.role}`}
                   className="absolute inset-0 w-full h-full object-cover"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = 'none';
@@ -213,7 +213,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
             {!hasError ? (
               <img
                 src={imgSrc}
-                alt={article.title}
+                alt={article.imageAlt || `${article.title} - editorial visual`}
                 referrerPolicy="no-referrer"
                 onError={handleImgError}
                 className="w-full h-full object-cover"

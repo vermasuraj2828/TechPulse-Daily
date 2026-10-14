@@ -11,6 +11,7 @@ export interface Author {
   name: string;
   role: string;
   avatar: string;
+  avatarAlt?: string;
 }
 
 export interface ArticleSection {
@@ -31,6 +32,7 @@ export interface Article {
   readTime: string;
   featuredImage: string;
   imageCaption: string;
+  imageAlt: string;
   excerpt: string;
   leadParagraph: string;
   sections: ArticleSection[];

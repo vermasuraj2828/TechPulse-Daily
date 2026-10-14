@@ -16,30 +16,35 @@ export const AboutPage: React.FC<AboutPageProps> = ({
       role: 'Senior Technology Editor',
       bio: 'Investigates machine learning systems, cognitive software architectures, and multi-modal neural models with a background in computational linguistics.',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&h=300&q=80',
+      avatarAlt: 'Portrait photograph of Elena Rostova, Senior Technology Editor at TechPulse Daily',
     },
     {
       name: 'Marcus Vance',
       role: 'Principal Workflow Architect',
       bio: 'Focuses on workplace automation, high-leverage developer tooling, software ergonomics, and the evolving protocols of the future internet.',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=300&q=80',
+      avatarAlt: 'Portrait photograph of Marcus Vance, Principal Workflow Architect at TechPulse Daily',
     },
     {
       name: 'Kenji Takahashi',
       role: 'Hardware & Devices Analyst',
       bio: 'Examines semiconductor roadmaps, solid-state battery chemistry, smartphone optical mechanics, and ambient smart home devices.',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&h=300&q=80',
+      avatarAlt: 'Portrait photograph of Kenji Takahashi, Hardware & Devices Analyst at TechPulse Daily',
     },
     {
       name: 'Dr. Sarah Lin',
       role: 'Organizational Technology Fellow',
       bio: 'Researches autonomous software agents, synthetic biological computation, enterprise AI transformation, and the economics of technological transitions.',
       avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&h=300&q=80',
+      avatarAlt: 'Portrait photograph of Dr. Sarah Lin, Organizational Technology Fellow at TechPulse Daily',
     },
     {
       name: 'Aiden Brooks',
       role: 'Cognitive Performance Specialist',
       bio: 'Studies attention economies, digital wellness protocols, mobile software ecosystems, and high-focus rituals for knowledge workers.',
       avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&h=300&q=80',
+      avatarAlt: 'Portrait photograph of Aiden Brooks, Cognitive Performance Specialist at TechPulse Daily',
     },
   ];
 
@@ -191,7 +196,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                     </span>
                     <img
                       src={member.avatar}
-                      alt={member.name}
+                      alt={member.avatarAlt || `Portrait of ${member.name}, ${member.role} at TechPulse Daily`}
                       className="absolute inset-0 w-full h-full object-cover"
                       onError={(e) => {
                         (e.target as HTMLElement).style.display = 'none';

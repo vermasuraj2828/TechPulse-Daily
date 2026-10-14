@@ -55,7 +55,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         {!hasError ? (
           <img
             src={imgSrc}
-            alt={article.title}
+            alt={article.imageAlt || `Featured image for ${article.title}`}
             referrerPolicy="no-referrer"
             onError={handleImgError}
             className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
@@ -117,7 +117,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               </span>
               <img
                 src={article.author.avatar}
-                alt={article.author.name}
+                alt={article.author.avatarAlt || `Portrait of ${article.author.name}, ${article.author.role}`}
                 className="absolute inset-0 w-full h-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = 'none';

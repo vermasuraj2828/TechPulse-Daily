@@ -12,6 +12,8 @@ const LOWERCASE_WORDS = new Set([
   'as', 'at', 'by', 'for', 'from', 'in', 'into', 'like', 'of', 'off', 'on', 'onto', 'per', 'to', 'up', 'via', 'with'
 ]);
 
+const TECH_ACRONYMS = new Set(['ai', 'api', 'ar', 'vr', 'cpu', 'gpu', 'npu', 'llm', 'llms', 'ui', 'ux', 'iot', 'seo']);
+
 /**
  * Capitalizes a string according to Title Case rules:
  * - First and last word are always capitalized.
@@ -22,22 +24,27 @@ const LOWERCASE_WORDS = new Set([
 export function toTitleCase(input: string): string {
   if (!input) return '';
 
-  return input.replace(/([A-Za-z0-9]+(?:'[A-Za-z]+)?)/g, (word, _offset, fullString) => {
+  return input.replace(/[A-Za-z0-9]+(?:'[A-Za-z]+)?/g, (word: string, offset: number, fullString: string) => {
     const lower = word.toLowerCase();
-    const index = fullString.indexOf(word);
-    const isFirst = index === 0;
-    const isLast = index + word.length >= fullString.length;
+    const isFirst = offset === 0;
+    const isLast = offset + word.length >= fullString.length;
 
     // Check if preceded by punctuation like colon or dash
-    const charBefore = index > 1 ? fullString.charAt(index - 2) : '';
-    const isAfterMajorPunctuation = charBefore === ':' || charBefore === '—' || charBefore === '-';
+    const textBefore = fullString.slice(0, offset).trim();
+    const lastChar = textBefore.length > 0 ? textBefore.charAt(textBefore.length - 1) : '';
+    const isAfterMajorPunctuation =
+      lastChar === ':' || lastChar === '—' || lastChar === '-' || lastChar === '.' || lastChar === '?' || lastChar === '!';
 
     if (!isFirst && !isLast && !isAfterMajorPunctuation && LOWERCASE_WORDS.has(lower)) {
       return lower;
     }
 
+    if (TECH_ACRONYMS.has(lower)) {
+      return lower.toUpperCase();
+    }
+
     // Capitalize first letter, retain existing uppercase like AI, NPUs, etc.
-    if (word === word.toUpperCase() && word.length <= 4) {
+    if (word === word.toUpperCase() && word.length <= 4 && !/^\d+$/.test(word)) {
       return word;
     }
 

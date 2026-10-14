@@ -69,7 +69,7 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
             {!hasError ? (
               <img
                 src={imgSrc}
-                alt={article.title}
+                alt={article.imageAlt || `Featured lead story: ${article.title}`}
                 referrerPolicy="no-referrer"
                 onError={handleImgError}
                 className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
@@ -132,7 +132,7 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
                   </span>
                   <img
                     src={article.author.avatar}
-                    alt={article.author.name}
+                    alt={article.author.avatarAlt || `Portrait of ${article.author.name}, ${article.author.role}`}
                     className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => {
                       (e.target as HTMLElement).style.display = 'none';
