@@ -445,6 +445,7 @@ export default function App() {
                       handleSelectCategory('All');
                     }}
                     className="inline-block px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors"
+                    aria-label="View all technology articles in catalog"
                   >
                     View All Articles
                   </a>

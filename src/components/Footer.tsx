@@ -195,7 +195,8 @@ export const Footer: React.FC<FooterProps> = ({
                 className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-indigo-600 hover:border-indigo-300 transition-colors"
                 aria-label="TechPulse Daily on X (Twitter)"
               >
-                <span className="font-bold text-xs">𝕏</span>
+                <span className="font-bold text-xs" aria-hidden="true">𝕏</span>
+                <span className="sr-only">TechPulse Daily on X (Twitter)</span>
               </a>
               <a
                 href="https://instagram.com"
@@ -204,7 +205,8 @@ export const Footer: React.FC<FooterProps> = ({
                 className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-indigo-600 hover:border-indigo-300 transition-colors text-xs font-bold"
                 aria-label="TechPulse Daily on Instagram"
               >
-                IG
+                <span aria-hidden="true">IG</span>
+                <span className="sr-only">TechPulse Daily on Instagram</span>
               </a>
               <a
                 href="https://linkedin.com"
@@ -213,7 +215,8 @@ export const Footer: React.FC<FooterProps> = ({
                 className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-indigo-600 hover:border-indigo-300 transition-colors text-xs font-bold"
                 aria-label="TechPulse Daily on LinkedIn"
               >
-                IN
+                <span aria-hidden="true">IN</span>
+                <span className="sr-only">TechPulse Daily on LinkedIn</span>
               </a>
             </div>
           </div>

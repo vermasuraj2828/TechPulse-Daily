@@ -54,7 +54,7 @@ export const PopularTopics: React.FC<PopularTopicsProps> = ({ onSelectTopic }) =
             href={getCategoryUrl(topic.category)}
             onClick={(e) => handleTopicClick(e, topic.category)}
             className="group text-left p-5 bg-slate-50/70 hover:bg-white border border-slate-200/80 hover:border-indigo-200 rounded-xl hover:shadow-sm transition-all duration-200 flex flex-col justify-between cursor-pointer block"
-            aria-label={`Explore ${topic.name}`}
+            aria-label={`Explore ${topic.name} category: ${topic.count} ${topic.count === 1 ? 'article' : 'articles'}`}
           >
             <div>
               <div className="w-10 h-10 rounded-lg bg-white border border-slate-200/80 flex items-center justify-center mb-4 group-hover:scale-105 group-hover:border-indigo-200 transition-all">

@@ -52,6 +52,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         className="relative aspect-[16/10] overflow-hidden bg-slate-900 cursor-pointer block"
         aria-label={`Read article: ${article.title}`}
       >
+        <span className="sr-only">{`Read article: ${article.title}`}</span>
         {!hasError ? (
           <img
             src={imgSrc}
@@ -137,6 +138,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             aria-label={`Read more: ${article.title}`}
           >
             <span>Read More</span>
+            <span className="sr-only">: {article.title}</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </a>
         </div>

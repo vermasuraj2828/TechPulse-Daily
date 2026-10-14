@@ -406,6 +406,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="group p-5 bg-white border border-slate-200 rounded-xl hover:border-indigo-300 hover:shadow-sm text-left transition-all cursor-pointer flex flex-col justify-between"
+              aria-label={`Read previous article: ${prevArticle.title}`}
             >
               <div>
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-400 group-hover:text-indigo-600 transition-colors mb-2">
@@ -430,6 +431,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="group p-5 bg-white border border-slate-200 rounded-xl hover:border-indigo-300 hover:shadow-sm text-right transition-all cursor-pointer flex flex-col justify-between"
+              aria-label={`Read next article: ${nextArticle.title}`}
             >
               <div>
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-400 group-hover:text-indigo-600 transition-colors mb-2 justify-end w-full">

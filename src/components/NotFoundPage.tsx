@@ -84,6 +84,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({
                 key={cat.name}
                 href={cat.url}
                 className="px-3 py-1.5 bg-white hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-colors"
+                aria-label={`Browse ${cat.name} section`}
               >
                 {cat.name}
               </a>
@@ -108,6 +109,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({
                   onReadArticle(art);
                 }}
                 className="group block p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/20 transition-all text-left"
+                aria-label={`Read recommended story: ${art.title}`}
               >
                 <div className="text-xs font-semibold text-indigo-600 mb-1">{art.category} · {art.readTime}</div>
                 <div className="font-serif-editorial text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">

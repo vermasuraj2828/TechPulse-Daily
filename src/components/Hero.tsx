@@ -145,6 +145,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOpenTopic, selecte
                 onExploreClick();
               }}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl shadow-sm hover:shadow transition-all duration-200 cursor-pointer active:scale-[0.99]"
+              aria-label="Explore all technology articles"
             >
               <Compass className="w-4 h-4" />
               <span>Explore Articles</span>
@@ -159,6 +160,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOpenTopic, selecte
                 onOpenTopic('AI');
               }}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-medium text-sm rounded-xl transition-colors cursor-pointer"
+              aria-label="Read artificial intelligence stories and breakthroughs"
             >
               <Sparkles className="w-4 h-4 text-indigo-600" />
               <span>Read AI Breakthroughs</span>

@@ -129,6 +129,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     href={getArticleUrl(article.slug)}
                     onClick={(e) => handleArticleClick(e, article)}
                     className="group p-4 rounded-xl border border-slate-200/90 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 block"
+                    aria-label={`Read article: ${article.title}`}
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-xs font-semibold text-indigo-600">
@@ -153,6 +154,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
                     <div className="shrink-0 flex items-center gap-1 text-xs font-semibold text-indigo-600 group-hover:translate-x-1 transition-transform self-end sm:self-center">
                       <span>Read</span>
+                      <span className="sr-only">: {article.title}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </div>
                   </a>
@@ -200,6 +202,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     href={getArticleUrl(article.slug)}
                     onClick={(e) => handleArticleClick(e, article)}
                     className="flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 group transition-colors block"
+                    aria-label={`Read article: ${article.title}`}
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors shrink-0" />

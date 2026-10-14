@@ -66,6 +66,7 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
             className="lg:col-span-7 relative min-h-[300px] sm:min-h-[400px] lg:min-h-[480px] overflow-hidden bg-slate-900 block cursor-pointer"
             aria-label={`Read featured article: ${article.title}`}
           >
+            <span className="sr-only">{`Read featured lead story: ${article.title}`}</span>
             {!hasError ? (
               <img
                 src={imgSrc}
@@ -154,8 +155,10 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
                 href={articleUrl}
                 onClick={handleArticleClick}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-indigo-600 text-white font-medium text-sm rounded-xl transition-colors cursor-pointer group/btn"
+                aria-label={`Read article: ${article.title}`}
               >
                 <span>Read Article</span>
+                <span className="sr-only">: {article.title}</span>
                 <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
               </a>
             </div>
