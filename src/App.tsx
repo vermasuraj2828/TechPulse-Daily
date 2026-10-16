@@ -30,10 +30,20 @@ import {
 import { getRouteTitle } from './utils/titleRules';
 import { getRouteMetaDescription } from './utils/metaDescriptionRules';
 
-export default function App() {
+export interface AppProps {
+  initialPath?: string;
+}
+
+export default function App({ initialPath }: AppProps = {}) {
   // Current active structured route
   const [currentRoute, setCurrentRoute] = useState<Route>(() => {
-    return parseRoute(window.location.pathname, window.location.search, window.location.hash);
+    if (initialPath) {
+      return parseRoute(initialPath);
+    }
+    if (typeof window !== 'undefined') {
+      return parseRoute(window.location.pathname, window.location.search, window.location.hash);
+    }
+    return { type: 'home', category: 'All' };
   });
 
   // Modals state

@@ -162,7 +162,7 @@ export function updatePageMetadata(
   document.title = title;
 
   // 2. Base origin for canonical URLs
-  const origin = window.location.origin || 'https://techpulsedaily.com';
+  const origin = (typeof window !== 'undefined' ? window.location.origin : '') || 'https://tec-plus-daily-1s5c.vercel.app';
   const fullCanonicalUrl = `${origin}${canonicalPath}`;
 
   // 3. Canonical Link Tag

@@ -78,7 +78,9 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
     .sort((a, b) => (a.category === article.category ? -1 : 1))
     .slice(0, 3);
 
-  const canonicalArticleUrl = `${window.location.origin}${getArticleUrl(article.slug)}`;
+  const canonicalArticleUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}${getArticleUrl(article.slug)}`
+    : `https://tec-plus-daily-1s5c.vercel.app${getArticleUrl(article.slug)}`;
 
   const handleCopyLink = () => {
     navigator.clipboard?.writeText(canonicalArticleUrl).catch(() => {});

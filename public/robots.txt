@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tec-plus-daily-1s5c.vercel.app/sitemap.xml
