@@ -156,6 +156,11 @@ async function prerender() {
         const cleanPath = path.resolve(distDir, `${route.replace(/^\//, '')}.html`);
         fs.writeFileSync(cleanPath, pageHtml, 'utf-8');
 
+        // If route is 404, also ensure root dist/404.html exists for Vercel default 404
+        if (route === '/404') {
+          fs.writeFileSync(path.resolve(distDir, '404.html'), pageHtml, 'utf-8');
+        }
+
         generatedFiles.push({
           path: route,
           file: `dist${route}/index.html`,
@@ -167,17 +172,18 @@ async function prerender() {
       console.log(`✓ Prerendered: ${route} (${title})`);
     }
 
-    // 7. Generate Sitemap XML
+    // 7. Generate Sitemap XML (Indexable content pages only, excluding error pages)
+    const indexableRoutes = routes.filter((r) => r !== '/404' && r !== '/484');
     const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${routes
+${indexableRoutes
   .map((r) => {
-    const loc = `${SITE_URL}${r === '/' ? '' : r}`;
-    const priority = r === '/' ? '1.0' : r.startsWith('/article/') ? '0.8' : '0.6';
+    const loc = `${SITE_URL}${r === '/' ? '/' : r}`;
+    const priority = r === '/' ? '1.0' : r.startsWith('/article/') ? '0.85' : '0.8';
     const changefreq = r === '/' ? 'daily' : r.startsWith('/article/') ? 'weekly' : 'monthly';
     return `  <url>
     <loc>${loc}</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`;

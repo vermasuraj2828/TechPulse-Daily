@@ -199,8 +199,8 @@ export function getRouteTitle(
     }
 
     case 'not-found':
-      // 37 characters
-      return buildPageTitle('Page Not Found (404)');
+      // 53 characters
+      return buildPageTitle('Page Not Found: Status 404 & 484');
 
     default:
       return 'TechPulse Daily – The Future of Technology Starts Today';

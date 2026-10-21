@@ -375,6 +375,7 @@ export default function App({ initialPath }: AppProps = {}) {
             onNavigateHome={handleNavigateHome}
             onReadArticle={handleOpenArticle}
             onOpenSearch={handleOpenSearchModal}
+            onNavigateUrl={(url) => navigate(url)}
           />
         ) : (
           /* Homepage or Category Catalog View */

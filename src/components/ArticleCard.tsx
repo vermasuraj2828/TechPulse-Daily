@@ -61,6 +61,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             onError={handleImgError}
             className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
             loading="lazy"
+            width={800}
+            height={500}
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white relative">
@@ -120,6 +122,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                 src={article.author.avatar}
                 alt={article.author.avatarAlt || `Portrait of ${article.author.name}, ${article.author.role}`}
                 className="absolute inset-0 w-full h-full object-cover"
+                width={28}
+                height={28}
+                loading="lazy"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = 'none';
                 }}

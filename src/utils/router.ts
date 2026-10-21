@@ -94,6 +94,19 @@ export function parseRoute(pathname: string, search: string = '', hash: string =
     cleanPath = cleanPath.slice(0, -1);
   }
 
+  // 301 redirect from /old-home to /
+  if (cleanPath === '/old-home') {
+    if (typeof window !== 'undefined') {
+      window.history.replaceState(null, '', '/');
+    }
+    return { type: 'home', category: 'All' };
+  }
+
+  // Explicit /484 or /404 error routes
+  if (cleanPath === '/484' || cleanPath === '/404') {
+    return { type: 'not-found', path: cleanPath };
+  }
+
   // Root Homepage
   if (cleanPath === '' || cleanPath === '/') {
     return { type: 'home', category: 'All' };
@@ -163,7 +176,7 @@ export function updatePageMetadata(
 
   // 2. Base origin for canonical URLs
   const origin = (typeof window !== 'undefined' ? window.location.origin : '') || 'https://tec-plus-daily-1s5c.vercel.app';
-  const fullCanonicalUrl = `${origin}${canonicalPath}`;
+  const fullCanonicalUrl = canonicalPath === '/' ? `${origin}/` : `${origin}${canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`}`;
 
   // 3. Canonical Link Tag
   let canonicalEl = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;

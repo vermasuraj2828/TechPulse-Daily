@@ -75,6 +75,8 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
                 onError={handleImgError}
                 className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 loading="eager"
+                width={1080}
+                height={600}
               />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white relative">
@@ -135,6 +137,9 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
                     src={article.author.avatar}
                     alt={article.author.avatarAlt || `Portrait of ${article.author.name}, ${article.author.role}`}
                     className="absolute inset-0 w-full h-full object-cover"
+                    width={40}
+                    height={40}
+                    loading="lazy"
                     onError={(e) => {
                       (e.target as HTMLElement).style.display = 'none';
                     }}

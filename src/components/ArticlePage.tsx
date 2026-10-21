@@ -188,6 +188,9 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
                   src={article.author.avatar}
                   alt={article.author.avatarAlt || `Portrait of ${article.author.name}, ${article.author.role}`}
                   className="absolute inset-0 w-full h-full object-cover"
+                  width={48}
+                  height={48}
+                  loading="lazy"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = 'none';
                   }}
@@ -229,6 +232,8 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
                 onError={handleImgError}
                 className="w-full h-full object-cover"
                 loading="eager"
+                width={1200}
+                height={675}
               />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white relative">

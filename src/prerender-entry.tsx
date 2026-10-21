@@ -30,6 +30,8 @@ export function getAllRoutes(): string[] {
     '/about',
     '/contact',
     '/privacy',
+    '/484',
+    '/404',
   ];
 
   // Category pages
@@ -217,7 +219,7 @@ function buildCategorySchema(category: string, canonicalUrl: string) {
  */
 export function renderRoute(path: string): PrerenderResult {
   const route = parseRoute(path);
-  const canonicalUrl = `${SITE_URL}${path === '/' ? '' : path}`;
+  const canonicalUrl = path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
   let title = 'TechPulse Daily – The Future of Technology Starts Today';
   let description = 'Discover insightful tech journalism, artificial intelligence breakthroughs, gadget reviews, and future trends shaping our world on TechPulse Daily.';
   let ogImage = `${SITE_URL}/assets/images/hero_ai_everyday_1791347956209.jpg`;
@@ -301,6 +303,12 @@ export function renderRoute(path: string): PrerenderResult {
     case 'privacy':
       title = getRouteTitle('privacy');
       description = getRouteMetaDescription('privacy');
+      break;
+
+    case 'not-found':
+      title = getRouteTitle('not-found');
+      description = getRouteMetaDescription('not-found');
+      ogType = 'website';
       break;
 
     default:

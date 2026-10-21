@@ -198,6 +198,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                       src={member.avatar}
                       alt={member.avatarAlt || `Portrait of ${member.name}, ${member.role} at TechPulse Daily`}
                       className="absolute inset-0 w-full h-full object-cover"
+                      width={64}
+                      height={64}
+                      loading="lazy"
                       onError={(e) => {
                         (e.target as HTMLElement).style.display = 'none';
                       }}
