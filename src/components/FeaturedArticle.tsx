@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, Clock } from 'lucide-react';
 import { Article, Category } from '../types/blog';
 import { getArticleUrl, getCategoryUrl } from '../utils/router';
@@ -17,12 +17,27 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
   const [imgSrc, setImgSrc] = useState(article.featuredImage);
   const [hasError, setHasError] = useState(false);
 
+  // Synchronize state when article or prop changes (e.g. after filter change or back navigation)
+  useEffect(() => {
+    setImgSrc(article.featuredImage);
+    setHasError(false);
+  }, [article.id, article.featuredImage]);
+
   const articleUrl = getArticleUrl(article.slug);
   const categoryUrl = getCategoryUrl(article.category);
 
   const handleImgError = () => {
     const filename = article.featuredImage.split('/').pop()?.split('?')[0];
-    if (filename && imgSrc !== `/images/${filename}`) {
+    if (!filename) {
+      setHasError(true);
+      return;
+    }
+
+    if (imgSrc.startsWith('/images/')) {
+      setImgSrc(`/assets/images/${filename}`);
+    } else if (imgSrc.startsWith('/assets/images/')) {
+      setImgSrc(`/assets/${filename}`);
+    } else if (!imgSrc.startsWith('/images/') && imgSrc !== `/images/${filename}`) {
       setImgSrc(`/images/${filename}`);
     } else {
       setHasError(true);
@@ -75,6 +90,8 @@ export const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
                 onError={handleImgError}
                 className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 width={1080}
                 height={600}
               />

@@ -1,15 +1,4 @@
 import { Article } from '../types/blog';
-import heroAiImg from '../assets/images/hero_ai_everyday_1791347956209.jpg';
-import smartphonesImg from '../assets/images/smartphones_future_1791347970000.jpg';
-import productivityImg from '../assets/images/digital_workspace_productivity_1791347981240.jpg';
-import smartHomeImg from '../assets/images/smart_home_living_1791347991805.jpg';
-import aiSearchImg from '../assets/images/ai_search_future_1791348007374.jpg';
-import roboticsImg from '../assets/images/future_tech_robotics_1791348021374.jpg';
-import wearablesImg from '../assets/images/ambient_wearables_ai_1791389682965.jpg';
-import digitalHabitsImg from '../assets/images/digital_habits_focus_1792557151977.jpg';
-import techTrendsImg from '../assets/images/tech_trends_decade_1792557153440.jpg';
-import mobileAppsImg from '../assets/images/mobile_ecosystem_apps_1792557153948.jpg';
-import futureInternetImg from '../assets/images/future_internet_nodes_1792557153349.jpg';
 
 export const ARTICLES: Article[] = [
   {
@@ -27,7 +16,7 @@ export const ARTICLES: Article[] = [
     date: 'October 4, 2026',
     readTime: '6 min read',
     featured: true,
-    featuredImage: heroAiImg,
+    featuredImage: '/images/hero_ai_everyday_1791347956209.jpg',
     imageCaption: 'Ambient machine intelligence is increasingly woven into the physical architecture of everyday human life.',
     imageAlt: 'Futuristic glowing holographic AI interface hovering in a modern architectural room, visualizing ambient machine intelligence',
     excerpt: 'Explore how artificial intelligence is transforming smartphones, web search, retail experiences, healthcare, and personal productivity behind the scenes.',
@@ -104,7 +93,7 @@ export const ARTICLES: Article[] = [
     date: 'October 3, 2026',
     readTime: '8 min read',
     featured: false,
-    featuredImage: productivityImg,
+    featuredImage: '/images/digital_workspace_productivity_1791347981240.jpg',
     imageCaption: 'A structured digital workspace harnessing specialized cognitive tools to eliminate clerical friction.',
     imageAlt: 'Clean minimalist digital workspace with dual widescreen monitors displaying coding tools, AI charts, and subtle ambient desk lighting',
     excerpt: 'Discover ten battle-tested AI tools across writing, research synthesis, coding, visual planning, and calendar automation to reclaim hours every week.',
@@ -186,7 +175,7 @@ export const ARTICLES: Article[] = [
     date: 'October 2, 2026',
     readTime: '7 min read',
     featured: false,
-    featuredImage: smartphonesImg,
+    featuredImage: '/images/smartphones_future_1791347970000.jpg',
     imageCaption: 'The next decade of smartphones will prioritize structural transformation, solid-state chemistry, and ambient intelligence.',
     imageAlt: 'Concept rendering of a futuristic tri-fold smartphone with transparent edge-to-edge screen resting on a dark slate surface',
     excerpt: 'Explore the breakthroughs redefining smartphones: tri-fold displays, silicon-carbon batteries, quantum camera sensors, and direct satellite connectivity.',
@@ -257,7 +246,7 @@ export const ARTICLES: Article[] = [
     date: 'October 1, 2026',
     readTime: '9 min read',
     featured: false,
-    featuredImage: roboticsImg,
+    featuredImage: '/images/future_tech_robotics_1791348021374.jpg',
     imageCaption: 'Collaborative digital pipelines are shifting human roles from repetitive synthesis to strategic direction and verification.',
     imageAlt: 'Articulated robotic arm and glowing data visualization interface collaborating alongside human workstation in a modern automated facility',
     excerpt: 'Discover how generative AI, autonomous software agents, and enterprise automation are fundamentally restructuring modern knowledge work and corporate roles.',
@@ -328,7 +317,7 @@ export const ARTICLES: Article[] = [
     date: 'September 30, 2026',
     readTime: '7 min read',
     featured: false,
-    featuredImage: digitalHabitsImg,
+    featuredImage: '/images/digital_habits_focus_1792557151977.jpg',
     imageCaption: 'Cultivating deliberate stillness and structural boundaries amidst an environment of constant digital noise.',
     imageAlt: 'Organized minimalist workspace setup featuring open notebook, fountain pen, mechanical keyboard, and cup of coffee for focused deep work',
     excerpt: 'Learn actionable strategies for mastering deep work: asynchronous communication protocols, ruthless notification triage, and focused physical workspaces.',
@@ -399,7 +388,7 @@ export const ARTICLES: Article[] = [
     date: 'September 28, 2026',
     readTime: '8 min read',
     featured: false,
-    featuredImage: smartHomeImg,
+    featuredImage: '/images/smart_home_living_1791347991805.jpg',
     imageCaption: 'The modern smart home balances invisible automation with rigorous local data security and natural materiality.',
     imageAlt: 'Contemporary smart living room interior with subtle circadian warm lighting, sleek connected home sensors, and natural timber finishes',
     excerpt: 'Discover how unified Matter standards, local neural processing, circadian lighting, and smart energy grids turn houses into intuitive living environments.',
@@ -470,7 +459,7 @@ export const ARTICLES: Article[] = [
     date: 'September 26, 2026',
     readTime: '7 min read',
     featured: false,
-    featuredImage: aiSearchImg,
+    featuredImage: '/images/ai_search_future_1791348007374.jpg',
     imageCaption: 'Search is shifting from rigid keyword matching to multi-dimensional semantic dialogue and synthesized answers.',
     imageAlt: 'Abstract multidimensional knowledge graph nodes interconnected with glowing fiber optic neural network pathways, representing generative search',
     excerpt: 'Explore the paradigm shift from keyword web indices to generative answer synthesis, real-time grounded citations, and multimodal search engines today.',
@@ -563,7 +552,7 @@ export const ARTICLES: Article[] = [
     date: 'September 24, 2026',
     readTime: '10 min read',
     featured: false,
-    featuredImage: techTrendsImg,
+    featuredImage: '/images/tech_trends_decade_1792557153440.jpg',
     imageCaption: 'The convergence of robotics, bio-computation, and quantum physics is accelerating technological timelines.',
     imageAlt: 'Futuristic panoramic concept illustrating humanoid robotics, clean geothermal energy grids, and quantum computing hardware',
     excerpt: 'Explore ten foundational technology frontiers poised to redefine global industry, preventative healthcare, clean energy, and computing over the next decade.',
@@ -660,7 +649,7 @@ export const ARTICLES: Article[] = [
     date: 'September 22, 2026',
     readTime: '8 min read',
     featured: false,
-    featuredImage: mobileAppsImg,
+    featuredImage: '/images/mobile_ecosystem_apps_1792557153948.jpg',
     imageCaption: 'The smartphone application ecosystem condensed entire physical industries into a single glass slate.',
     imageAlt: 'Multiple mobile smartphones displaying user interface screens for banking, transit navigation maps, messaging, and health diagnostics',
     excerpt: 'Discover how the mobile app revolution dismantled physical barriers across personal banking, urban transit, global social networks, and modern healthcare.',
@@ -730,7 +719,7 @@ export const ARTICLES: Article[] = [
     date: 'September 20, 2026',
     readTime: '9 min read',
     featured: false,
-    featuredImage: futureInternetImg,
+    featuredImage: '/images/future_internet_nodes_1792557153349.jpg',
     imageCaption: 'The future internet will transform from a catalog of static web pages into an adaptive, conversational fabric.',
     imageAlt: 'Spatial 3D web network showing decentralized cryptographic nodes, flowing data streams, and holographic interconnected information architecture',
     excerpt: 'Explore the next digital era: generative user interfaces, decentralized verifiable identity, spatial web standards, and authentic human community online.',
@@ -801,7 +790,7 @@ export const ARTICLES: Article[] = [
     date: 'October 6, 2026',
     readTime: '8 min read',
     featured: false,
-    featuredImage: wearablesImg,
+    featuredImage: '/images/ambient_wearables_ai_1791389682965.jpg',
     imageCaption: 'The convergence of waveguide micro-optics and continuous physiological sensors is redefining the boundary of personal hardware.',
     imageAlt: 'Pair of sleek augmented reality waveguide smart glasses and dark titanium health tracking smart ring resting on textured stone with subtle cyan LED aura',
     excerpt: 'Discover how smart glasses, neural rings, and non-invasive metabolic telemetry are liberating users from glowing smartphone screens into ambient computing.',

@@ -47,7 +47,16 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
 
   const handleImgError = () => {
     const filename = article.featuredImage.split('/').pop()?.split('?')[0];
-    if (filename && imgSrc !== `/images/${filename}`) {
+    if (!filename) {
+      setHasError(true);
+      return;
+    }
+
+    if (imgSrc.startsWith('/images/')) {
+      setImgSrc(`/assets/images/${filename}`);
+    } else if (imgSrc.startsWith('/assets/images/')) {
+      setImgSrc(`/assets/${filename}`);
+    } else if (!imgSrc.startsWith('/images/') && imgSrc !== `/images/${filename}`) {
       setImgSrc(`/images/${filename}`);
     } else {
       setHasError(true);
@@ -232,6 +241,8 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
                 onError={handleImgError}
                 className="w-full h-full object-cover"
                 loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 width={1200}
                 height={675}
               />
