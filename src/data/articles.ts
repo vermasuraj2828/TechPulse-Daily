@@ -6,6 +6,10 @@ import smartHomeImg from '../assets/images/smart_home_living_1791347991805.jpg';
 import aiSearchImg from '../assets/images/ai_search_future_1791348007374.jpg';
 import roboticsImg from '../assets/images/future_tech_robotics_1791348021374.jpg';
 import wearablesImg from '../assets/images/ambient_wearables_ai_1791389682965.jpg';
+import digitalHabitsImg from '../assets/images/digital_habits_focus_1792557151977.jpg';
+import techTrendsImg from '../assets/images/tech_trends_decade_1792557153440.jpg';
+import mobileAppsImg from '../assets/images/mobile_ecosystem_apps_1792557153948.jpg';
+import futureInternetImg from '../assets/images/future_internet_nodes_1792557153349.jpg';
 
 export const ARTICLES: Article[] = [
   {
@@ -324,7 +328,7 @@ export const ARTICLES: Article[] = [
     date: 'September 30, 2026',
     readTime: '7 min read',
     featured: false,
-    featuredImage: productivityImg,
+    featuredImage: digitalHabitsImg,
     imageCaption: 'Cultivating deliberate stillness and structural boundaries amidst an environment of constant digital noise.',
     imageAlt: 'Organized minimalist workspace setup featuring open notebook, fountain pen, mechanical keyboard, and cup of coffee for focused deep work',
     excerpt: 'Learn actionable strategies for mastering deep work: asynchronous communication protocols, ruthless notification triage, and focused physical workspaces.',
@@ -559,7 +563,7 @@ export const ARTICLES: Article[] = [
     date: 'September 24, 2026',
     readTime: '10 min read',
     featured: false,
-    featuredImage: roboticsImg,
+    featuredImage: techTrendsImg,
     imageCaption: 'The convergence of robotics, bio-computation, and quantum physics is accelerating technological timelines.',
     imageAlt: 'Futuristic panoramic concept illustrating humanoid robotics, clean geothermal energy grids, and quantum computing hardware',
     excerpt: 'Explore ten foundational technology frontiers poised to redefine global industry, preventative healthcare, clean energy, and computing over the next decade.',
@@ -656,7 +660,7 @@ export const ARTICLES: Article[] = [
     date: 'September 22, 2026',
     readTime: '8 min read',
     featured: false,
-    featuredImage: smartphonesImg,
+    featuredImage: mobileAppsImg,
     imageCaption: 'The smartphone application ecosystem condensed entire physical industries into a single glass slate.',
     imageAlt: 'Multiple mobile smartphones displaying user interface screens for banking, transit navigation maps, messaging, and health diagnostics',
     excerpt: 'Discover how the mobile app revolution dismantled physical barriers across personal banking, urban transit, global social networks, and modern healthcare.',
@@ -726,7 +730,7 @@ export const ARTICLES: Article[] = [
     date: 'September 20, 2026',
     readTime: '9 min read',
     featured: false,
-    featuredImage: aiSearchImg,
+    featuredImage: futureInternetImg,
     imageCaption: 'The future internet will transform from a catalog of static web pages into an adaptive, conversational fabric.',
     imageAlt: 'Spatial 3D web network showing decentralized cryptographic nodes, flowing data streams, and holographic interconnected information architecture',
     excerpt: 'Explore the next digital era: generative user interfaces, decentralized verifiable identity, spatial web standards, and authentic human community online.',
